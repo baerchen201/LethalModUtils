@@ -4,7 +4,7 @@
     <Product>LethalModUtils</Product>
     <Title>$(Product)</Title>
     <Authors>baer1</Authors>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <AssemblyName>$(Authors).$(Product)</AssemblyName>
     <Description>A collection of useful modding utilities for Lethal Company</Description>
     <PackageTags>lethal company;bepinex</PackageTags>

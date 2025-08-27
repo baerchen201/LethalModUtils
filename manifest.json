@@ -1,6 +1,6 @@
 {
   "name": "LethalModUtils",
-  "version_number": "0.0.1",
+  "version_number": "0.0.2",
   "website_url": "https://github.com/baerchen201/LethalModUtils",
   "description": "A collection of useful modding utilities",
   "dependencies": ["BepInEx-BepInExPack-5.4.2100"]
