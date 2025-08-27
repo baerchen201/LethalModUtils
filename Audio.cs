@@ -136,6 +136,100 @@ public static class Audio
     }
 
     /// <summary>
+    /// Synchronously loads an audio file
+    /// </summary>
+    /// <param name="path">The audio file to load</param>
+    /// <param name="webRequest">The <see cref="UnityWebRequest"/> used to obtain the file</param>
+    /// <param name="timeout">An optional timeout for the load operation</param>
+    /// <returns>A playback-ready AudioClip</returns>
+    /// <exception cref="UnknownTypeError"/>
+    /// <exception cref="TimeoutException"/>
+    /// <exception cref="RequestError"/>
+    /// <exception cref="ClipError"/>
+    public static AudioClip Load(Uri path, out UnityWebRequest webRequest, TimeSpan? timeout = null)
+    {
+        var ext = Path.GetExtension(path.AbsolutePath).ToLower();
+        var audioType = GetAudioType(ext);
+        LethalModUtils.Logger.LogDebug(
+            $">> Audio.Load({path}, {timeout.str()}) audioType:{audioType}"
+        );
+        if (audioType == AudioType.UNKNOWN)
+        {
+            var e = new UnknownTypeError(ext);
+            LethalModUtils.Logger.LogWarning($"Error loading {path}: {e.Message}");
+            throw e;
+        }
+
+        webRequest = UnityWebRequestMultimedia.GetAudioClip(path, audioType);
+        ((DownloadHandlerAudioClip)webRequest.downloadHandler).streamAudio = !LethalModUtils
+            .Instance
+            .PreloadAudio;
+        webRequest.SendWebRequest();
+        if (timeout != null)
+        {
+            var timeoutTask = Task.Delay(timeout.Value);
+            while (!webRequest.isDone && !timeoutTask.IsCompleted) { }
+
+            if (!webRequest.isDone)
+            {
+                var e = new TimeoutException();
+                LethalModUtils.Logger.LogWarning($"Error loading {path}: {e.Message}");
+                throw e;
+            }
+        }
+        else
+            while (!webRequest.isDone) { }
+
+        if (webRequest.result != UnityWebRequest.Result.Success)
+        {
+            var e = new RequestError(webRequest.error);
+            LethalModUtils.Logger.LogWarning($"Error loading {path}: {e.Message}");
+            throw e;
+        }
+
+        var audioClip = DownloadHandlerAudioClip.GetContent(webRequest);
+        if (audioClip is null or { loadState: not AudioDataLoadState.Loaded })
+        {
+            var e = new ClipError(audioClip?.loadState);
+            LethalModUtils.Logger.LogWarning($"Error loading {path}: {e.Message}");
+            throw e;
+        }
+
+        LethalModUtils.Logger.LogInfo($"Loaded {path}");
+        return audioClip;
+    }
+
+    /// <summary>
+    /// Tries to synchronously load an audio file
+    /// </summary>
+    /// <param name="path">The audio file to load</param>
+    /// <param name="webRequest">The <see cref="UnityWebRequest"/> used to obtain the file</param>
+    /// <param name="timeout">An optional timeout for the load operation</param>
+    /// <returns>
+    /// On success: A playback-ready AudioClip
+    /// On failure: null
+    /// </returns>
+    public static AudioClip? TryLoad(
+        Uri path,
+        out UnityWebRequest? webRequest,
+        TimeSpan? timeout = null
+    )
+    {
+        webRequest = null;
+        LethalModUtils.Logger.LogDebug($">> Audio.TryLoad({path}, {timeout.str()})");
+        try
+        {
+            return Load(path, out webRequest, timeout);
+        }
+        catch (Exception e)
+        {
+            LethalModUtils.Logger.LogDebug($"<< Audio.TryLoad null ({e})");
+        }
+
+        return null;
+    }
+
+    /// <summary>
     /// Asynchronously loads an audio file
     /// </summary>
     /// <param name="path">The audio file to load</param>
