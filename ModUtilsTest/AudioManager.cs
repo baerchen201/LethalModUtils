@@ -74,72 +74,67 @@ public class AudioManager
     {
         private static void a(Audio.AudioPlayer player)
         {
-            try
+            if (
+                StartOfRound.Instance.inShipPhase
+                || GameNetworkManager.Instance.localPlayerController.isPlayerDead
+            )
+            {
+                Fade(player, false);
+            }
+            else if (player.State == Audio.AudioPlayer.PlayerState.Paused)
+            {
+                player.Resume();
+                player.Volume = 0f;
+            }
+            else
             {
                 if (
-                    StartOfRound.Instance.inShipPhase
-                    || GameNetworkManager.Instance.localPlayerController.isPlayerDead
-                )
-                {
-                    Fade(player, false);
-                }
-                else if (player.State == Audio.AudioPlayer.PlayerState.Paused)
-                {
-                    player.Resume();
-                    player.Volume = 0f;
-                }
-                else
-                {
-                    Fade(player, true);
+                    // ReSharper disable once AssignmentInConditionalExpression
                     player.BypassEffects = GameNetworkManager
                         .Instance
                         .localPlayerController
-                        .isInsideFactory;
-                }
-            }
-            catch (NullReferenceException e)
-            {
-                ModUtilsTest.Logger.LogWarning(e);
+                        .isInsideFactory
+                )
+                    player.Volume = 0.5f;
+                else
+                    Fade(player, true);
             }
         }
 
         private static void b(Audio.AudioPlayer player)
         {
-            try
+            if (
+                !StartOfRound.Instance.inShipPhase
+                && !GameNetworkManager.Instance.localPlayerController.isPlayerDead
+            )
             {
-                if (
-                    !StartOfRound.Instance.inShipPhase
-                    && !GameNetworkManager.Instance.localPlayerController.isPlayerDead
-                )
-                {
-                    Fade(player, false);
-                }
-                else if (player.State == Audio.AudioPlayer.PlayerState.Paused)
-                {
-                    player.Resume();
-                    player.Volume = 0f;
-                }
-                else
-                {
-                    Fade(player, true);
-                }
+                Fade(player, false);
             }
-            catch (NullReferenceException e)
+            else if (player.State == Audio.AudioPlayer.PlayerState.Paused)
             {
-                ModUtilsTest.Logger.LogWarning(e);
+                player.Resume();
+                player.Volume = 0f;
+            }
+            else
+            {
+                Fade(player, true);
             }
         }
 
         private static void Fade(Audio.AudioPlayer player, bool value)
         {
+            const float TARGET = 0.3f,
+                STEP = 0.02f,
+                THRESHOLD = TARGET - STEP * 10f;
             if (value)
-                player.Volume = player.Volume < 0.48f ? Mathf.Lerp(player.Volume, 5f, 0.02f) : 5f;
+                player.Volume =
+                    player.Volume < THRESHOLD ? Mathf.Lerp(player.Volume, TARGET, STEP) : TARGET;
             else
             {
-                if (player.Volume <= 0.02f)
+                if (player.Volume <= STEP)
                     player.Stop();
                 else
-                    player.Volume = Mathf.Lerp(player.Volume, 0f, 0.02f);
+                    player.Volume = Mathf.Lerp(player.Volume, 0f, STEP);
             }
         }
 
@@ -148,12 +143,14 @@ public class AudioManager
             var shipSound = ModUtilsTest.Instance.AudioManager.ShipBackgroundMusic;
             var planetSound = ModUtilsTest.Instance.AudioManager.PlanetBackgroundMusic;
             if (shipSound != null)
-                shipSound.Play(b);
+                shipSound.PlayAt(StartOfRound.Instance.transform, b).Loop = true;
             if (planetSound != null)
-                planetSound
-                    .CreatePlayer(a)
-                    ._audioSource.gameObject.AddComponent<AudioLowPassFilter>()
-                    .cutoffFrequency = 200f;
+            {
+                var player = planetSound.CreatePlayerAt(StartOfRound.Instance.transform, a);
+                player._audioSource.gameObject.AddComponent<AudioLowPassFilter>().cutoffFrequency =
+                    1000f;
+                player.Loop = true;
+            }
         }
     }
 }
