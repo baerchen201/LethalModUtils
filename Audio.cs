@@ -452,9 +452,9 @@ public static class Audio
         /// </summary>
         public void Pause()
         {
-            LethalModUtils.Logger.LogDebug($">> AudioPlayer.Pause() State:{State}");
             if (State != PlayerState.Playing)
                 return;
+            LethalModUtils.Logger.LogDebug($">> AudioPlayer.Pause() State:{State}");
             AudioSource.Pause();
             State = PlayerState.Paused;
         }
@@ -464,9 +464,9 @@ public static class Audio
         /// </summary>
         public void Stop()
         {
-            LethalModUtils.Logger.LogDebug($">> AudioPlayer.Stop() State:{State}");
             if (State == PlayerState.Finished)
                 return;
+            LethalModUtils.Logger.LogDebug($">> AudioPlayer.Stop() State:{State}");
             AudioSource.Stop();
             AudioSource.Pause();
             State = PlayerState.Paused;
@@ -477,15 +477,16 @@ public static class Audio
         /// </summary>
         public void Resume()
         {
-            LethalModUtils.Logger.LogDebug($">> AudioPlayer.Resume() State:{State}");
             if (State != PlayerState.Paused)
                 return;
+            LethalModUtils.Logger.LogDebug($">> AudioPlayer.Resume() State:{State}");
             AudioSource.Play();
             State = PlayerState.Playing;
         }
 
         private IEnumerator mainLoop()
         {
+            yield return null; // gives the user or library a chance to resume playback before the first update
             try
             {
                 while (State != PlayerState.Finished && AudioSource && GameObject)
