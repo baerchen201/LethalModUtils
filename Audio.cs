@@ -454,7 +454,6 @@ public static class Audio
         {
             if (State != PlayerState.Playing)
                 return;
-            LethalModUtils.Logger.LogDebug($">> AudioPlayer.Pause() State:{State}");
             AudioSource.Pause();
             State = PlayerState.Paused;
         }
@@ -466,7 +465,6 @@ public static class Audio
         {
             if (State == PlayerState.Finished)
                 return;
-            LethalModUtils.Logger.LogDebug($">> AudioPlayer.Stop() State:{State}");
             AudioSource.Stop();
             AudioSource.Pause();
             State = PlayerState.Paused;
@@ -479,7 +477,6 @@ public static class Audio
         {
             if (State != PlayerState.Paused)
                 return;
-            LethalModUtils.Logger.LogDebug($">> AudioPlayer.Resume() State:{State}");
             AudioSource.Play();
             State = PlayerState.Playing;
         }
