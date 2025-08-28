@@ -22,6 +22,8 @@ public class ModUtilsTest : BaseUnityPlugin
         AudioManager = new AudioManager();
         AudioManager.LoadAudioFiles();
 
+        LogoReplacement.LoadImage();
+
         Patch();
 
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");

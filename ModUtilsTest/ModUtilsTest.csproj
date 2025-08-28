@@ -56,6 +56,6 @@
     />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BepInEx\plugins\Sounds\" />
+    <Folder Include="BepInEx\plugins\Images" />
   </ItemGroup>
 </Project>
