@@ -350,6 +350,7 @@ public static class Audio
         private readonly Action<AudioPlayer>? MainLoop;
         internal readonly GameObject GameObject;
         internal readonly AudioSource AudioSource;
+        private bool finished;
 
         private class _MonoBehaviour : MonoBehaviour;
 
@@ -364,7 +365,7 @@ public static class Audio
             GameObject.hideFlags = HideFlags.HideAndDontSave;
 
             AudioSource.clip = audioClip;
-            State = PlayerState.Paused;
+            finished = false;
 
             GameObject.AddComponent<_MonoBehaviour>().StartCoroutine(this.mainLoop());
         }
@@ -379,7 +380,10 @@ public static class Audio
         /// <summary>
         /// The current state of the player
         /// </summary>
-        public PlayerState State { get; private set; }
+        public PlayerState State =>
+            finished ? PlayerState.Finished
+            : AudioSource.isPlaying ? PlayerState.Playing
+            : PlayerState.Paused;
 
         /// <summary>
         /// <see cref="AudioSource.mute"/>
@@ -538,49 +542,30 @@ public static class Audio
                 Object.Destroy(AudioSource);
             if (GameObject)
                 Object.Destroy(GameObject);
-            State = PlayerState.Finished;
+            finished = true;
         }
 
         /// <summary>
         /// Pause playback
         /// </summary>
-        public void Pause()
-        {
-            if (State != PlayerState.Playing)
-                return;
-            AudioSource.Pause();
-            State = PlayerState.Paused;
-        }
+        public void Pause() => AudioSource?.Pause();
 
         /// <summary>
         /// Reset position to the start and pause playback
         /// </summary>
-        public void Stop()
-        {
-            if (State == PlayerState.Finished)
-                return;
-            AudioSource.Stop();
-            AudioSource.Pause();
-            State = PlayerState.Paused;
-        }
+        public void Stop() => AudioSource?.Stop();
 
         /// <summary>
         /// Resume playback after pausing
         /// </summary>
-        public void Resume()
-        {
-            if (State != PlayerState.Paused)
-                return;
-            AudioSource.Play();
-            State = PlayerState.Playing;
-        }
+        public void Resume() => AudioSource?.Play();
 
         private IEnumerator mainLoop()
         {
             yield return null; // gives the user or library a chance to resume playback before the first update
             try
             {
-                while (State != PlayerState.Finished && AudioSource && GameObject)
+                while (!finished && AudioSource && GameObject)
                 {
                     MainLoop?.Invoke(this);
                     yield return null;
