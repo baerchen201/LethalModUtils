@@ -62,7 +62,6 @@ public static class FS
         );
         if (!root.Exists)
             return;
-        root.GetDirectories().ForEach(RecurseWithParameters);
         var f = filter?.Invoke(root) ?? ProcessFilter.All;
         if (f is ProcessFilter.All or ProcessFilter.DirectoriesOnly)
             root.GetDirectories().ForEach(RecurseWithParameters);
