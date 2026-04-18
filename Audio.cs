@@ -13,32 +13,33 @@ public static class Audio
     #region Loading Audio Files
 
     /// <summary>
-    /// The file extension of the audio file is unknown
+    ///     The file extension of the audio file is unknown
     /// </summary>
     /// <param name="fileExtension">The file extension that was parsed</param>
     public class UnknownTypeError(string fileExtension)
         : Exception($"Unrecognized audio file type: {fileExtension}");
 
     /// <summary>
-    /// The <see cref="UnityWebRequest"/> did not succeed
+    ///     The <see cref="UnityWebRequest" /> did not succeed
     /// </summary>
     /// <param name="errorMessage">The error message</param>
     public class RequestError(string errorMessage) : Exception($"WebRequest error: {errorMessage}");
 
     /// <summary>
-    /// The <see cref="AudioClip"/> is in an invalid state
+    ///     The <see cref="AudioClip" /> is in an invalid state
     /// </summary>
-    /// <param name="state">The state of the <see cref="AudioClip"/></param>
+    /// <param name="state">The state of the <see cref="AudioClip" /></param>
     public class ClipError(AudioDataLoadState? state)
         : Exception($"Clip load error: {state?.ToString() ?? "null"}");
 
     /// <summary>
-    /// Assumes an <see cref="AudioType"/> value based on a file extension.
+    ///     Assumes an <see cref="AudioType" /> value based on a file extension.
     /// </summary>
     /// <param name="ext">The file extension, in lowercase, with the dot (for example <c>.mp3</c>)</param>
-    /// <returns>The <see cref="AudioType"/> for the file extension, or <see cref="AudioType.UNKNOWN"/></returns>
-    private static AudioType GetAudioType(string ext) =>
-        ext.ToLower() switch
+    /// <returns>The <see cref="AudioType" /> for the file extension, or <see cref="AudioType.UNKNOWN" /></returns>
+    private static AudioType GetAudioType(string ext)
+    {
+        return ext.ToLower() switch
         {
             ".ogg" => AudioType.OGGVORBIS,
             ".mp3" => AudioType.MPEG,
@@ -47,17 +48,18 @@ public static class Audio
             ".aiff" => AudioType.AIFF,
             _ => AudioType.UNKNOWN,
         };
+    }
 
     /// <summary>
-    /// Synchronously loads an audio file
+    ///     Synchronously loads an audio file
     /// </summary>
     /// <param name="path">The audio file to load</param>
     /// <param name="timeout">An optional timeout for the load operation</param>
     /// <returns>A playback-ready AudioClip</returns>
-    /// <exception cref="UnknownTypeError"/>
-    /// <exception cref="TimeoutException"/>
-    /// <exception cref="RequestError"/>
-    /// <exception cref="ClipError"/>
+    /// <exception cref="UnknownTypeError" />
+    /// <exception cref="TimeoutException" />
+    /// <exception cref="RequestError" />
+    /// <exception cref="ClipError" />
     public static AudioClip Load(Uri path, TimeSpan? timeout = null)
     {
         var ext = Path.GetExtension(path.AbsolutePath).ToLower();
@@ -90,7 +92,9 @@ public static class Audio
             }
         }
         else
+        {
             while (!webRequest.isDone) { }
+        }
 
         if (webRequest.result != UnityWebRequest.Result.Success)
         {
@@ -112,13 +116,13 @@ public static class Audio
     }
 
     /// <summary>
-    /// Tries to synchronously load an audio file
+    ///     Tries to synchronously load an audio file
     /// </summary>
     /// <param name="path">The audio file to load</param>
     /// <param name="timeout">An optional timeout for the load operation</param>
     /// <returns>
-    /// On success: A playback-ready AudioClip
-    /// On failure: null
+    ///     On success: A playback-ready AudioClip
+    ///     On failure: null
     /// </returns>
     public static AudioClip? TryLoad(Uri path, TimeSpan? timeout = null)
     {
@@ -136,16 +140,16 @@ public static class Audio
     }
 
     /// <summary>
-    /// Synchronously loads an audio file
+    ///     Synchronously loads an audio file
     /// </summary>
     /// <param name="path">The audio file to load</param>
-    /// <param name="webRequest">The <see cref="UnityWebRequest"/> used to obtain the file</param>
+    /// <param name="webRequest">The <see cref="UnityWebRequest" /> used to obtain the file</param>
     /// <param name="timeout">An optional timeout for the load operation</param>
     /// <returns>A playback-ready AudioClip</returns>
-    /// <exception cref="UnknownTypeError"/>
-    /// <exception cref="TimeoutException"/>
-    /// <exception cref="RequestError"/>
-    /// <exception cref="ClipError"/>
+    /// <exception cref="UnknownTypeError" />
+    /// <exception cref="TimeoutException" />
+    /// <exception cref="RequestError" />
+    /// <exception cref="ClipError" />
     public static AudioClip Load(Uri path, out UnityWebRequest webRequest, TimeSpan? timeout = null)
     {
         var ext = Path.GetExtension(path.AbsolutePath).ToLower();
@@ -178,7 +182,9 @@ public static class Audio
             }
         }
         else
+        {
             while (!webRequest.isDone) { }
+        }
 
         if (webRequest.result != UnityWebRequest.Result.Success)
         {
@@ -200,14 +206,14 @@ public static class Audio
     }
 
     /// <summary>
-    /// Tries to synchronously load an audio file
+    ///     Tries to synchronously load an audio file
     /// </summary>
     /// <param name="path">The audio file to load</param>
-    /// <param name="webRequest">The <see cref="UnityWebRequest"/> used to obtain the file</param>
+    /// <param name="webRequest">The <see cref="UnityWebRequest" /> used to obtain the file</param>
     /// <param name="timeout">An optional timeout for the load operation</param>
     /// <returns>
-    /// On success: A playback-ready AudioClip
-    /// On failure: null
+    ///     On success: A playback-ready AudioClip
+    ///     On failure: null
     /// </returns>
     public static AudioClip? TryLoad(
         Uri path,
@@ -230,15 +236,15 @@ public static class Audio
     }
 
     /// <summary>
-    /// Asynchronously loads an audio file
+    ///     Asynchronously loads an audio file
     /// </summary>
     /// <param name="path">The audio file to load</param>
     /// <param name="timeout">An optional timeout for the load operation</param>
     /// <returns>A playback-ready AudioClip</returns>
-    /// <exception cref="UnknownTypeError"/>
-    /// <exception cref="TimeoutException"/>
-    /// <exception cref="RequestError"/>
-    /// <exception cref="ClipError"/>
+    /// <exception cref="UnknownTypeError" />
+    /// <exception cref="TimeoutException" />
+    /// <exception cref="RequestError" />
+    /// <exception cref="ClipError" />
     public static Task<AudioClip> LoadAsync(Uri path, TimeSpan? timeout = null)
     {
         LethalModUtils.Logger.LogDebug($">> Audio.LoadAsync({path}, {timeout.str()})");
@@ -261,14 +267,14 @@ public static class Audio
     }
 
     /// <summary>
-    /// Asynchronously loads an audio file using Unity's Coroutines
+    ///     Asynchronously loads an audio file using Unity's Coroutines
     /// </summary>
     /// <param name="path">The audio file to load</param>
-    /// <param name="task">A <see cref="TaskCompletionSource{AudioClip}"/> which contains the result</param>
+    /// <param name="task">A <see cref="TaskCompletionSource{AudioClip}" /> which contains the result</param>
     /// <returns>A playback-ready AudioClip</returns>
-    /// <exception cref="UnknownTypeError"/>
-    /// <exception cref="RequestError"/>
-    /// <exception cref="ClipError"/>
+    /// <exception cref="UnknownTypeError" />
+    /// <exception cref="RequestError" />
+    /// <exception cref="ClipError" />
     private static IEnumerator LoadEnumerator(Uri path, TaskCompletionSource<AudioClip> task)
     {
         var ext = Path.GetExtension(path.AbsolutePath).ToLower();
@@ -312,15 +318,15 @@ public static class Audio
     }
 
     /// <summary>
-    /// Tries to asynchronously load an audio file
+    ///     Tries to asynchronously load an audio file
     /// </summary>
     /// <param name="path">The audio file to load</param>
     /// <param name="timeout">An optional timeout for the load operation</param>
     /// <returns>
-    /// On success: A playback-ready AudioClip
-    /// On failure: null
+    ///     On success: A playback-ready AudioClip
+    ///     On failure: null
     /// </returns>
-    public async static Task<AudioClip?> TryLoadAsync(Uri path, TimeSpan? timeout = null)
+    public static async Task<AudioClip?> TryLoadAsync(Uri path, TimeSpan? timeout = null)
     {
         LethalModUtils.Logger.LogDebug($">> Audio.TryLoadAsync({path}, {timeout.str()})");
         try
@@ -340,19 +346,28 @@ public static class Audio
     #region Playing AudioClips
 
     /// <summary>
-    /// A manager class that allows simple playback of an AudioClip
+    ///     A manager class that allows simple playback of an AudioClip
     /// </summary>
-    /// <seealso cref="Audio.Play"/>
+    /// <seealso cref="Audio.Play" />
     public class AudioPlayer
     {
-        private AudioPlayer() => throw new InvalidOperationException();
+        public enum PlayerState
+        {
+            Playing,
+            Paused,
+            Finished,
+        }
+
+        internal readonly AudioSource AudioSource;
+        internal readonly GameObject GameObject;
 
         private readonly Action<AudioPlayer>? MainLoop;
-        internal readonly GameObject GameObject;
-        internal readonly AudioSource AudioSource;
         private bool finished;
 
-        private class _MonoBehaviour : MonoBehaviour;
+        private AudioPlayer()
+        {
+            throw new InvalidOperationException();
+        }
 
         internal AudioPlayer(AudioClip audioClip, Action<AudioPlayer>? mainLoop)
         {
@@ -370,15 +385,8 @@ public static class Audio
             GameObject.AddComponent<_MonoBehaviour>().StartCoroutine(this.mainLoop());
         }
 
-        public enum PlayerState
-        {
-            Playing,
-            Paused,
-            Finished,
-        }
-
         /// <summary>
-        /// The current state of the player
+        ///     The current state of the player
         /// </summary>
         public PlayerState State =>
             finished ? PlayerState.Finished
@@ -386,7 +394,7 @@ public static class Audio
             : PlayerState.Paused;
 
         /// <summary>
-        /// <see cref="AudioSource.mute"/>
+        ///     <see cref="AudioSource.mute" />
         /// </summary>
         public bool Muted
         {
@@ -395,7 +403,7 @@ public static class Audio
         }
 
         /// <summary>
-        /// <see cref="AudioSource.bypassEffects"/>
+        ///     <see cref="AudioSource.bypassEffects" />
         /// </summary>
         public bool BypassEffects
         {
@@ -404,7 +412,7 @@ public static class Audio
         }
 
         /// <summary>
-        /// <see cref="AudioSource.bypassListenerEffects"/>
+        ///     <see cref="AudioSource.bypassListenerEffects" />
         /// </summary>
         public bool BypassListenerEffects
         {
@@ -413,7 +421,7 @@ public static class Audio
         }
 
         /// <summary>
-        /// <see cref="AudioSource.bypassReverbZones"/>
+        ///     <see cref="AudioSource.bypassReverbZones" />
         /// </summary>
         public bool BypassReverbZones
         {
@@ -422,7 +430,7 @@ public static class Audio
         }
 
         /// <summary>
-        /// <see cref="AudioSource.loop"/>
+        ///     <see cref="AudioSource.loop" />
         /// </summary>
         public bool Loop
         {
@@ -431,7 +439,7 @@ public static class Audio
         }
 
         /// <summary>
-        /// <see cref="AudioSource.priority"/>
+        ///     <see cref="AudioSource.priority" />
         /// </summary>
         public int Priority
         {
@@ -440,7 +448,7 @@ public static class Audio
         }
 
         /// <summary>
-        /// <see cref="AudioSource.volume"/>
+        ///     <see cref="AudioSource.volume" />
         /// </summary>
         public float Volume
         {
@@ -449,7 +457,7 @@ public static class Audio
         }
 
         /// <summary>
-        /// <see cref="AudioSource.pitch"/>
+        ///     <see cref="AudioSource.pitch" />
         /// </summary>
         public float Pitch
         {
@@ -458,7 +466,7 @@ public static class Audio
         }
 
         /// <summary>
-        /// <see cref="AudioSource.dopplerLevel"/>
+        ///     <see cref="AudioSource.dopplerLevel" />
         /// </summary>
         public float DopplerLevel
         {
@@ -467,19 +475,38 @@ public static class Audio
         }
 
         /// <summary>
-        /// <see cref="AudioSource.maxDistance"/>
+        ///     <see cref="AudioSource.maxDistance" />
         /// </summary>
-        /// <seealso cref="SetRange(float?,float?)"/>
+        /// <seealso cref="SetRange(float?,float?)" />
         public float MaxDistance => AudioSource.maxDistance;
 
         /// <summary>
-        /// <see cref="AudioSource.minDistance"/>
+        ///     <see cref="AudioSource.minDistance" />
         /// </summary>
-        /// <seealso cref="SetRange(float?,float?)"/>
+        /// <seealso cref="SetRange(float?,float?)" />
         public float MinDistance => AudioSource.minDistance;
 
         /// <summary>
-        /// Sets the maxDistance and minDistance options and enabled 3D playback
+        ///     <see cref="AudioSource.rolloffMode" />
+        /// </summary>
+        /// <seealso cref="SetRolloff(bool)" />
+        /// <seealso cref="SetRolloff(AnimationCurve)" />
+        public AudioRolloffMode RolloffMode => AudioSource.rolloffMode;
+
+        /// <summary>
+        ///     <see cref="AudioSource.GetCustomCurve" />
+        /// </summary>
+        /// <seealso cref="SetRolloff(AnimationCurve)" />
+        public AnimationCurve RolloffCurve =>
+            AudioSource.GetCustomCurve(AudioSourceCurveType.CustomRolloff);
+
+        /// <summary>
+        ///     Audio Source used to play sound, for more control
+        /// </summary>
+        public AudioSource _audioSource => AudioSource;
+
+        /// <summary>
+        ///     Sets the maxDistance and minDistance options and enabled 3D playback
         /// </summary>
         /// <param name="maxDistance">The maximum distance the sound can be heard from (null: no change)</param>
         /// <param name="minDistance">The distance at which the sound will begin to fade (null: no change)</param>
@@ -493,35 +520,26 @@ public static class Audio
         }
 
         /// <summary>
-        /// Disables 3D playback
+        ///     Disables 3D playback
         /// </summary>
-        public void SetRange() => AudioSource.spatialBlend = 0f;
+        public void SetRange()
+        {
+            AudioSource.spatialBlend = 0f;
+        }
 
         /// <summary>
-        /// <see cref="AudioSource.rolloffMode"/>
-        /// </summary>
-        /// <seealso cref="SetRolloff(bool)"/>
-        /// <seealso cref="SetRolloff(AnimationCurve)"/>
-        public AudioRolloffMode RolloffMode => AudioSource.rolloffMode;
-
-        /// <summary>
-        /// <see cref="AudioSource.GetCustomCurve"/>
-        /// </summary>
-        /// <seealso cref="SetRolloff(AnimationCurve)"/>
-        public AnimationCurve RolloffCurve =>
-            AudioSource.GetCustomCurve(AudioSourceCurveType.CustomRolloff);
-
-        /// <summary>
-        /// Sets the 3D rolloff mode to <see cref="AudioRolloffMode.Linear"/> or <see cref="AudioRolloffMode.Logarithmic"/>
+        ///     Sets the 3D rolloff mode to <see cref="AudioRolloffMode.Linear" /> or <see cref="AudioRolloffMode.Logarithmic" />
         /// </summary>
         /// <param name="linear">Which mode to use</param>
-        public void SetRolloff(bool linear = true) =>
+        public void SetRolloff(bool linear = true)
+        {
             AudioSource.rolloffMode = linear
                 ? AudioRolloffMode.Linear
                 : AudioRolloffMode.Logarithmic;
+        }
 
         /// <summary>
-        /// Sets a custom 3D rolloff curve
+        ///     Sets a custom 3D rolloff curve
         /// </summary>
         /// <param name="curve">The custom curve</param>
         public void SetRolloff(AnimationCurve curve)
@@ -531,7 +549,7 @@ public static class Audio
         }
 
         /// <summary>
-        /// Stop playback and destroy playback components
+        ///     Stop playback and destroy playback components
         /// </summary>
         public void Cancel()
         {
@@ -546,19 +564,28 @@ public static class Audio
         }
 
         /// <summary>
-        /// Pause playback
+        ///     Pause playback
         /// </summary>
-        public void Pause() => AudioSource?.Pause();
+        public void Pause()
+        {
+            AudioSource?.Pause();
+        }
 
         /// <summary>
-        /// Reset position to the start and pause playback
+        ///     Reset position to the start and pause playback
         /// </summary>
-        public void Stop() => AudioSource?.Stop();
+        public void Stop()
+        {
+            AudioSource?.Stop();
+        }
 
         /// <summary>
-        /// Resume playback after pausing
+        ///     Resume playback after pausing
         /// </summary>
-        public void Resume() => AudioSource?.Play();
+        public void Resume()
+        {
+            AudioSource?.Play();
+        }
 
         private IEnumerator mainLoop()
         {
@@ -577,23 +604,20 @@ public static class Audio
             }
         }
 
-        /// <summary>
-        /// Audio Source used to play sound, for more control
-        /// </summary>
-        public AudioSource _audioSource => AudioSource;
-
         public override string ToString()
         {
             return $"{GetType().Name} {{ State:{State}, Volume:{Volume}, Muted:{Muted}, MainLoop:{MainLoop.str()} }}";
         }
+
+        private class _MonoBehaviour : MonoBehaviour;
     }
 
     /// <summary>
-    /// Creates an <see cref="AudioPlayer"/> for this audio clip and plays it
+    ///     Creates an <see cref="AudioPlayer" /> for this audio clip and plays it
     /// </summary>
-    /// <param name="audioClip">The source <see cref="AudioClip"/></param>
+    /// <param name="audioClip">The source <see cref="AudioClip" /></param>
     /// <param name="mainLoop">An optional function that runs each frame</param>
-    /// <returns>The newly created <see cref="AudioPlayer"/></returns>
+    /// <returns>The newly created <see cref="AudioPlayer" /></returns>
     public static AudioPlayer Play(this AudioClip audioClip, Action<AudioPlayer>? mainLoop = null)
     {
         var audioPlayer = new AudioPlayer(audioClip, mainLoop);
@@ -602,23 +626,26 @@ public static class Audio
     }
 
     /// <summary>
-    /// Creates an <see cref="AudioPlayer"/> for this audio clip. Use <see cref="AudioPlayer.Resume"/> to play it
+    ///     Creates an <see cref="AudioPlayer" /> for this audio clip. Use <see cref="AudioPlayer.Resume" /> to play it
     /// </summary>
-    /// <param name="audioClip">The source <see cref="AudioClip"/></param>
+    /// <param name="audioClip">The source <see cref="AudioClip" /></param>
     /// <param name="mainLoop">An optional function that runs each frame</param>
-    /// <returns>The newly created <see cref="AudioPlayer"/></returns>
+    /// <returns>The newly created <see cref="AudioPlayer" /></returns>
     public static AudioPlayer CreatePlayer(
         this AudioClip audioClip,
         Action<AudioPlayer>? mainLoop = null
-    ) => new(audioClip, mainLoop);
+    )
+    {
+        return new AudioPlayer(audioClip, mainLoop);
+    }
 
     /// <summary>
-    /// Creates an <see cref="AudioPlayer"/> for this audio clip at the specified position and plays it
+    ///     Creates an <see cref="AudioPlayer" /> for this audio clip at the specified position and plays it
     /// </summary>
-    /// <param name="audioClip">The source <see cref="AudioClip"/></param>
-    /// <param name="position">The position where the <see cref="AudioSource"/> is placed</param>
+    /// <param name="audioClip">The source <see cref="AudioClip" /></param>
+    /// <param name="position">The position where the <see cref="AudioSource" /> is placed</param>
     /// <param name="mainLoop">An optional function that runs each frame</param>
-    /// <returns>The newly created <see cref="AudioPlayer"/></returns>
+    /// <returns>The newly created <see cref="AudioPlayer" /></returns>
     public static AudioPlayer PlayAt(
         this AudioClip audioClip,
         Vector3 position,
@@ -632,12 +659,12 @@ public static class Audio
     }
 
     /// <summary>
-    /// Creates an <see cref="AudioPlayer"/> for this audio clip at the specified position and plays it
+    ///     Creates an <see cref="AudioPlayer" /> for this audio clip at the specified position and plays it
     /// </summary>
-    /// <param name="audioClip">The source <see cref="AudioClip"/></param>
-    /// <param name="parent">The <see cref="GameObject"/> to which the <see cref="AudioSource"/> will be parented</param>
+    /// <param name="audioClip">The source <see cref="AudioClip" /></param>
+    /// <param name="parent">The <see cref="GameObject" /> to which the <see cref="AudioSource" /> will be parented</param>
     /// <param name="mainLoop">An optional function that runs each frame</param>
-    /// <returns>The newly created <see cref="AudioPlayer"/></returns>
+    /// <returns>The newly created <see cref="AudioPlayer" /></returns>
     public static AudioPlayer PlayAt(
         this AudioClip audioClip,
         Transform parent,
@@ -652,13 +679,13 @@ public static class Audio
     }
 
     /// <summary>
-    /// Creates an <see cref="AudioPlayer"/> for this audio clip at the specified position and plays it
+    ///     Creates an <see cref="AudioPlayer" /> for this audio clip at the specified position and plays it
     /// </summary>
-    /// <param name="audioClip">The source <see cref="AudioClip"/></param>
-    /// <param name="parent">The <see cref="GameObject"/> to which the <see cref="AudioSource"/> will be parented</param>
-    /// <param name="offset">The relative position where the <see cref="AudioSource"/> is placed</param>
+    /// <param name="audioClip">The source <see cref="AudioClip" /></param>
+    /// <param name="parent">The <see cref="GameObject" /> to which the <see cref="AudioSource" /> will be parented</param>
+    /// <param name="offset">The relative position where the <see cref="AudioSource" /> is placed</param>
     /// <param name="mainLoop">An optional function that runs each frame</param>
-    /// <returns>The newly created <see cref="AudioPlayer"/></returns>
+    /// <returns>The newly created <see cref="AudioPlayer" /></returns>
     public static AudioPlayer PlayAt(
         this AudioClip audioClip,
         Transform parent,
@@ -674,13 +701,13 @@ public static class Audio
     }
 
     /// <summary>
-    /// Creates an <see cref="AudioPlayer"/> for this audio clip at the specified position and plays it
+    ///     Creates an <see cref="AudioPlayer" /> for this audio clip at the specified position and plays it
     /// </summary>
-    /// <param name="audioClip">The source <see cref="AudioClip"/></param>
-    /// <param name="position">The absolute position where the <see cref="AudioSource"/> is placed</param>
-    /// <param name="parent">The <see cref="GameObject"/> to which the <see cref="AudioSource"/> will be parented</param>
+    /// <param name="audioClip">The source <see cref="AudioClip" /></param>
+    /// <param name="position">The absolute position where the <see cref="AudioSource" /> is placed</param>
+    /// <param name="parent">The <see cref="GameObject" /> to which the <see cref="AudioSource" /> will be parented</param>
     /// <param name="mainLoop">An optional function that runs each frame</param>
-    /// <returns>The newly created <see cref="AudioPlayer"/></returns>
+    /// <returns>The newly created <see cref="AudioPlayer" /></returns>
     public static AudioPlayer PlayAt(
         this AudioClip audioClip,
         Vector3 position,
@@ -696,12 +723,13 @@ public static class Audio
     }
 
     /// <summary>
-    /// Creates an <see cref="AudioPlayer"/> for this audio clip at the specified position. Use <see cref="AudioPlayer.Resume"/> to play it
+    ///     Creates an <see cref="AudioPlayer" /> for this audio clip at the specified position. Use
+    ///     <see cref="AudioPlayer.Resume" /> to play it
     /// </summary>
-    /// <param name="audioClip">The source <see cref="AudioClip"/></param>
-    /// <param name="position">The position where the <see cref="AudioSource"/> is placed</param>
+    /// <param name="audioClip">The source <see cref="AudioClip" /></param>
+    /// <param name="position">The position where the <see cref="AudioSource" /> is placed</param>
     /// <param name="mainLoop">An optional function that runs each frame</param>
-    /// <returns>The newly created <see cref="AudioPlayer"/></returns>
+    /// <returns>The newly created <see cref="AudioPlayer" /></returns>
     public static AudioPlayer CreatePlayerAt(
         this AudioClip audioClip,
         Vector3 position,
@@ -714,12 +742,13 @@ public static class Audio
     }
 
     /// <summary>
-    /// Creates an <see cref="AudioPlayer"/> for this audio clip at the specified position. Use <see cref="AudioPlayer.Resume"/> to play it
+    ///     Creates an <see cref="AudioPlayer" /> for this audio clip at the specified position. Use
+    ///     <see cref="AudioPlayer.Resume" /> to play it
     /// </summary>
-    /// <param name="audioClip">The source <see cref="AudioClip"/></param>
-    /// <param name="parent">The <see cref="GameObject"/> to which the <see cref="AudioSource"/> will be parented</param>
+    /// <param name="audioClip">The source <see cref="AudioClip" /></param>
+    /// <param name="parent">The <see cref="GameObject" /> to which the <see cref="AudioSource" /> will be parented</param>
     /// <param name="mainLoop">An optional function that runs each frame</param>
-    /// <returns>The newly created <see cref="AudioPlayer"/></returns>
+    /// <returns>The newly created <see cref="AudioPlayer" /></returns>
     public static AudioPlayer CreatePlayerAt(
         this AudioClip audioClip,
         Transform parent,
@@ -733,13 +762,14 @@ public static class Audio
     }
 
     /// <summary>
-    /// Creates an <see cref="AudioPlayer"/> for this audio clip at the specified position. Use <see cref="AudioPlayer.Resume"/> to play it
+    ///     Creates an <see cref="AudioPlayer" /> for this audio clip at the specified position. Use
+    ///     <see cref="AudioPlayer.Resume" /> to play it
     /// </summary>
-    /// <param name="audioClip">The source <see cref="AudioClip"/></param>
-    /// <param name="parent">The <see cref="GameObject"/> to which the <see cref="AudioSource"/> will be parented</param>
-    /// <param name="offset">The relative position where the <see cref="AudioSource"/> is placed</param>
+    /// <param name="audioClip">The source <see cref="AudioClip" /></param>
+    /// <param name="parent">The <see cref="GameObject" /> to which the <see cref="AudioSource" /> will be parented</param>
+    /// <param name="offset">The relative position where the <see cref="AudioSource" /> is placed</param>
     /// <param name="mainLoop">An optional function that runs each frame</param>
-    /// <returns>The newly created <see cref="AudioPlayer"/></returns>
+    /// <returns>The newly created <see cref="AudioPlayer" /></returns>
     public static AudioPlayer CreatePlayerAt(
         this AudioClip audioClip,
         Transform parent,
@@ -754,13 +784,14 @@ public static class Audio
     }
 
     /// <summary>
-    /// Creates an <see cref="AudioPlayer"/> for this audio clip at the specified position. Use <see cref="AudioPlayer.Resume"/> to play it
+    ///     Creates an <see cref="AudioPlayer" /> for this audio clip at the specified position. Use
+    ///     <see cref="AudioPlayer.Resume" /> to play it
     /// </summary>
-    /// <param name="audioClip">The source <see cref="AudioClip"/></param>
-    /// <param name="position">The absolute position where the <see cref="AudioSource"/> is placed</param>
-    /// <param name="parent">The <see cref="GameObject"/> to which the <see cref="AudioSource"/> will be parented</param>
+    /// <param name="audioClip">The source <see cref="AudioClip" /></param>
+    /// <param name="position">The absolute position where the <see cref="AudioSource" /> is placed</param>
+    /// <param name="parent">The <see cref="GameObject" /> to which the <see cref="AudioSource" /> will be parented</param>
     /// <param name="mainLoop">An optional function that runs each frame</param>
-    /// <returns>The newly created <see cref="AudioPlayer"/></returns>
+    /// <returns>The newly created <see cref="AudioPlayer" /></returns>
     public static AudioPlayer CreatePlayerAt(
         this AudioClip audioClip,
         Vector3 position,

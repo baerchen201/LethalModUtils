@@ -16,7 +16,7 @@ public static class FS
     }
 
     /// <summary>
-    /// Iterates over all files in a directory tree
+    ///     Iterates over all files in a directory tree
     /// </summary>
     /// <param name="root">The root of the directory tree</param>
     /// <param name="callback">The callback which is called for each found file (returns success status)</param>
@@ -41,12 +41,14 @@ public static class FS
             i += root.GetFiles().Count(callback);
         return i;
 
-        int RecurseWithParameters(DirectoryInfo _root) =>
-            IterateDirectories(_root, callback, filter);
+        int RecurseWithParameters(DirectoryInfo _root)
+        {
+            return IterateDirectories(_root, callback, filter);
+        }
     }
 
     /// <summary>
-    /// Iterates over all files in a directory tree
+    ///     Iterates over all files in a directory tree
     /// </summary>
     /// <param name="root">The root of the directory tree</param>
     /// <param name="callback">The callback which is called for each found file</param>
@@ -69,7 +71,9 @@ public static class FS
             root.GetFiles().ForEach(callback);
         return;
 
-        void RecurseWithParameters(DirectoryInfo _root) =>
+        void RecurseWithParameters(DirectoryInfo _root)
+        {
             IterateDirectories(_root, callback, filter);
+        }
     }
 }

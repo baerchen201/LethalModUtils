@@ -8,11 +8,10 @@ namespace LethalModUtils;
 [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
 public class LethalModUtils : BaseUnityPlugin
 {
+    private ConfigEntry<bool> preloadAudio = null!;
     public static LethalModUtils Instance { get; private set; } = null!;
     internal static new ManualLogSource Logger { get; private set; } = null!;
     internal static Harmony? Harmony { get; set; }
-
-    private ConfigEntry<bool> preloadAudio = null!;
     public bool PreloadAudio { get; private set; }
 
     private void Awake()

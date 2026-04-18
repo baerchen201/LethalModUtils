@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -12,18 +11,17 @@ public class Image
     #region Loading Textures
 
     /// <summary>
-    /// The <see cref="UnityWebRequest"/> did not succeed
+    ///     The <see cref="UnityWebRequest" /> did not succeed
     /// </summary>
     /// <param name="errorMessage">The error message</param>
     public class RequestError(string errorMessage) : Exception($"WebRequest error: {errorMessage}");
 
     /// <summary>
-    /// The <see cref="Texture2D"/> is null
+    ///     The <see cref="Texture2D" /> is null
     /// </summary>
     public class TextureError() : Exception("Texture is null");
 
 #if false // Unity is fucking weird and I can't be fucked to fix it
-    
     /// <summary>
     /// Synchronously loads an image file
     /// </summary>
@@ -177,18 +175,18 @@ public class Image
 
         return null;
     }
-    
+
 #endif
 
     /// <summary>
-    /// Asynchronously loads an image file
+    ///     Asynchronously loads an image file
     /// </summary>
     /// <param name="path">The image file to load</param>
     /// <param name="timeout">An optional timeout for the load operation</param>
     /// <returns>A display-ready Texture2D</returns>
-    /// <exception cref="TimeoutException"/>
-    /// <exception cref="RequestError"/>
-    /// <exception cref="TextureError"/>
+    /// <exception cref="TimeoutException" />
+    /// <exception cref="RequestError" />
+    /// <exception cref="TextureError" />
     public static Task<Texture2D> LoadAsync(Uri path, TimeSpan? timeout = null)
     {
         LethalModUtils.Logger.LogDebug($">> Image.LoadAsync({path}, {timeout.str()})");
@@ -211,14 +209,14 @@ public class Image
     }
 
     /// <summary>
-    /// Asynchronously loads an image file using Unity's Coroutines
+    ///     Asynchronously loads an image file using Unity's Coroutines
     /// </summary>
     /// <param name="path">The image file to load</param>
-    /// <param name="task">A <see cref="TaskCompletionSource{Texture2D}"/> which contains the result</param>
+    /// <param name="task">A <see cref="TaskCompletionSource{Texture2D}" /> which contains the result</param>
     /// <returns>A display-ready Texture2D</returns>
-    /// <exception cref="TimeoutException"/>
-    /// <exception cref="RequestError"/>
-    /// <exception cref="TextureError"/>
+    /// <exception cref="TimeoutException" />
+    /// <exception cref="RequestError" />
+    /// <exception cref="TextureError" />
     private static IEnumerator LoadEnumerator(Uri path, TaskCompletionSource<Texture2D> task)
     {
         LethalModUtils.Logger.LogDebug($">> Image.LoadEnumerator({path}, {task})");
@@ -248,15 +246,15 @@ public class Image
     }
 
     /// <summary>
-    /// Tries to asynchronously load an image file
+    ///     Tries to asynchronously load an image file
     /// </summary>
     /// <param name="path">The image file to load</param>
     /// <param name="timeout">An optional timeout for the load operation</param>
     /// <returns>
-    /// On success: A display-ready Texture2D
-    /// On failure: null
+    ///     On success: A display-ready Texture2D
+    ///     On failure: null
     /// </returns>
-    public async static Task<Texture2D?> TryLoadAsync(Uri path, TimeSpan? timeout = null)
+    public static async Task<Texture2D?> TryLoadAsync(Uri path, TimeSpan? timeout = null)
     {
         LethalModUtils.Logger.LogDebug($">> Image.TryLoadAsync({path}, {timeout.str()})");
         try
@@ -276,11 +274,11 @@ public class Image
     #region Sprites
 
     /// <summary>
-    /// Creates a <see cref="UnityEngine.Sprite"/> object from a <see cref="Texture2D"/>
+    ///     Creates a <see cref="UnityEngine.Sprite" /> object from a <see cref="Texture2D" />
     /// </summary>
     /// <param name="texture">The source texture</param>
     /// <param name="centered">Whether the texture should be centered in the sprite</param>
-    /// <returns>The newly created <see cref="Sprite"/></returns>
+    /// <returns>The newly created <see cref="Sprite" /></returns>
     public static Sprite Texture2DToSprite(Texture2D texture, bool centered = true)
     {
         return Sprite.Create(
@@ -295,7 +293,9 @@ public class Image
 
 public static class Texture2DExtensions
 {
-    /// <inheritdoc cref="Image.Texture2DToSprite"/>
-    public static Sprite ToSprite(this Texture2D texture, bool centered = true) =>
-        Image.Texture2DToSprite(texture, centered);
+    /// <inheritdoc cref="Image.Texture2DToSprite" />
+    public static Sprite ToSprite(this Texture2D texture, bool centered = true)
+    {
+        return Image.Texture2DToSprite(texture, centered);
+    }
 }

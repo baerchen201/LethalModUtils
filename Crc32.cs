@@ -264,7 +264,11 @@ public static class Crc32
         0x2D02EF8D,
     ];
 
-    public static uint Calculate(byte[] bytes) =>
-        bytes.Aggregate(0xFFFFFFFF, (current, b) => (current >> 8) ^ table[(current ^ b) & 0xFF])
-        ^ 0xFFFFFFFF;
+    public static uint Calculate(byte[] bytes)
+    {
+        return bytes.Aggregate(
+                0xFFFFFFFF,
+                (current, b) => (current >> 8) ^ table[(current ^ b) & 0xFF]
+            ) ^ 0xFFFFFFFF;
+    }
 }
