@@ -726,11 +726,19 @@ public struct StaticData
         public bool SnowFootprints;
     }
 
+    public int GameVersion;
+    public string ModVersion;
+    public long ImportTime;
+
     public ItemType[] ItemTable;
     public EnemyType[] EnemyTable;
     public Level[] Levels;
 
-    public static StaticData Import(AllItemsList allItemsList, SelectableLevel[] selectableLevels)
+    public static StaticData Import(
+        int gameVersion,
+        AllItemsList allItemsList,
+        SelectableLevel[] selectableLevels
+    )
     {
         List<ItemType> ItemTable = [];
         List<EnemyType> EnemyTable = [];
@@ -818,6 +826,10 @@ public struct StaticData
 
         return new StaticData
         {
+            GameVersion = gameVersion,
+            ModVersion = MyPluginInfo.PLUGIN_VERSION,
+            ImportTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+
             ItemTable = ItemTable.ToArray(),
             EnemyTable = EnemyTable.ToArray(),
             Levels = Levels.ToArray(),

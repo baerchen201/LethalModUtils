@@ -79,7 +79,13 @@ public class LethalModUtils : BaseUnityPlugin
             );
             using var writer = new StreamWriter(f, Encoding.UTF8);
             using var jsonWriter = new JsonTextWriter(writer);
-            StaticData.Import(__instance.allItemsList, __instance.levels).Serialize(jsonWriter);
+            StaticData
+                .Import(
+                    GameNetworkManager.Instance?.gameVersionNum ?? -1,
+                    __instance.allItemsList,
+                    __instance.levels
+                )
+                .Serialize(jsonWriter);
             jsonWriter.Flush();
             writer.Flush();
             f.Flush();
