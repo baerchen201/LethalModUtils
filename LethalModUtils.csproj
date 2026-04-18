@@ -39,8 +39,6 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=./</PathMap>
-    <!-- Exclude Test mod -->
-    <DefaultItemExcludes>$(DefaultItemExcludes);ModUtilsTest/**</DefaultItemExcludes>
   </PropertyGroup>
   <!-- Primary Package References -->
   <ItemGroup>
