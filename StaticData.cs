@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using HarmonyLib;
 using Newtonsoft.Json;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace LethalModUtils;
 
@@ -13,9 +12,85 @@ public struct StaticData
 {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static string[] toSArr<T>(IEnumerable<T>? enumerable)
-        where T : Object
     {
-        return enumerable?.Select(i => i?.name ?? string.Empty).ToArray() ?? [];
+        return enumerable?.Select(i => i?.ToString() ?? string.Empty).ToArray() ?? [];
+    }
+
+    public static class UnityUtil
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Keyframe ToUnity(AnimationCurve.Keyframe keyframe)
+        {
+            return new Keyframe(
+                keyframe.time,
+                keyframe.value,
+                keyframe.inTangent,
+                keyframe.outTangent,
+                keyframe.inWeight,
+                keyframe.outWeight
+            );
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static AnimationCurve.Keyframe Import(Keyframe keyframe)
+        {
+            return new AnimationCurve.Keyframe
+            {
+                time = keyframe.time,
+                value = keyframe.value,
+                inTangent = keyframe.inTangent,
+                outTangent = keyframe.outTangent,
+                inWeight = keyframe.inWeight,
+                outWeight = keyframe.outWeight,
+            };
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static UnityEngine.AnimationCurve ToUnity(AnimationCurve animationCurve)
+        {
+            return new UnityEngine.AnimationCurve(animationCurve.keys.Select(ToUnity).ToArray());
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static AnimationCurve Import(UnityEngine.AnimationCurve animationCurve)
+        {
+            return new AnimationCurve { keys = animationCurve.keys.Select(Import).ToArray() };
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static UnityEngine.Color ToUnity(Color color)
+        {
+            return new UnityEngine.Color(color.r, color.g, color.b, color.a);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Color Import(UnityEngine.Color color)
+        {
+            return new Color
+            {
+                r = color.r,
+                g = color.g,
+                b = color.b,
+                a = color.a,
+            };
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static UnityEngine.Vector3 ToUnity(Vector3 vector3)
+        {
+            return new UnityEngine.Vector3(vector3.x, vector3.y, vector3.z);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 Import(UnityEngine.Vector3 vector3)
+        {
+            return new Vector3
+            {
+                x = vector3.x,
+                y = vector3.y,
+                z = vector3.z,
+            };
+        }
     }
 
     public struct AnimationCurve
@@ -28,53 +103,9 @@ public struct StaticData
             public float outTangent;
             public float inWeight;
             public float outWeight;
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static implicit operator UnityEngine.Keyframe(Keyframe keyframe)
-            {
-                return new UnityEngine.Keyframe(
-                    keyframe.time,
-                    keyframe.value,
-                    keyframe.inTangent,
-                    keyframe.outTangent,
-                    keyframe.inWeight,
-                    keyframe.outWeight
-                );
-            }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public static implicit operator Keyframe(UnityEngine.Keyframe keyframe)
-            {
-                return new Keyframe
-                {
-                    time = keyframe.time,
-                    value = keyframe.value,
-                    inTangent = keyframe.inTangent,
-                    outTangent = keyframe.outTangent,
-                    inWeight = keyframe.inWeight,
-                    outWeight = keyframe.outWeight,
-                };
-            }
         }
 
         public Keyframe[] keys;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator UnityEngine.AnimationCurve(AnimationCurve animationCurve)
-        {
-            return new UnityEngine.AnimationCurve(
-                animationCurve.keys.Select(i => (UnityEngine.Keyframe)i).ToArray()
-            );
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator AnimationCurve(UnityEngine.AnimationCurve animationCurve)
-        {
-            return new AnimationCurve
-            {
-                keys = animationCurve.keys.Select(i => (Keyframe)i).ToArray(),
-            };
-        }
     }
 
     public struct Color
@@ -83,24 +114,6 @@ public struct StaticData
         public float g;
         public float b;
         public float a;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator UnityEngine.Color(Color color)
-        {
-            return new UnityEngine.Color(color.r, color.g, color.b, color.a);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Color(UnityEngine.Color color)
-        {
-            return new Color
-            {
-                r = color.r,
-                g = color.g,
-                b = color.b,
-                a = color.a,
-            };
-        }
     }
 
     public struct Vector3
@@ -108,23 +121,6 @@ public struct StaticData
         public float x;
         public float y;
         public float z;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator UnityEngine.Vector3(Vector3 vector3)
-        {
-            return new UnityEngine.Vector3(vector3.x, vector3.y, vector3.z);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator Vector3(UnityEngine.Vector3 vector3)
-        {
-            return new Vector3
-            {
-                x = vector3.x,
-                y = vector3.y,
-                z = vector3.z,
-            };
-        }
     }
 
     public struct ItemType
@@ -225,8 +221,8 @@ public struct StaticData
                 Id = item.itemId,
                 Name = item.itemName,
                 LockedInDemo = item.lockedInDemo,
-                PrefabName = item.spawnPrefab?.name ?? string.Empty,
-                ItemIcon = item.itemIcon?.name ?? string.Empty,
+                PrefabName = item.spawnPrefab?.ToString() ?? string.Empty,
+                ItemIcon = item.itemIcon?.ToString() ?? string.Empty,
                 SpawnPositionTypes =
                     item.spawnPositionTypes?.Select(i => i.itemSpawnTypeName).ToArray() ?? [],
                 TwoHanded = item.twoHanded,
@@ -252,10 +248,10 @@ public struct StaticData
                 UseAnimation = item.useAnim,
                 PocketAnimation = item.pocketAnim,
                 ThrowAnimation = item.throwAnim,
-                GrabSFX = item.grabSFX?.name ?? string.Empty,
-                DropSFX = item.dropSFX?.name ?? string.Empty,
-                PocketSFX = item.pocketSFX?.name ?? string.Empty,
-                ThrowSFX = item.throwSFX?.name ?? string.Empty,
+                GrabSFX = item.grabSFX?.ToString() ?? string.Empty,
+                DropSFX = item.dropSFX?.ToString() ?? string.Empty,
+                PocketSFX = item.pocketSFX?.ToString() ?? string.Empty,
+                ThrowSFX = item.throwSFX?.ToString() ?? string.Empty,
                 SyncGrabFunction = item.syncGrabFunction,
                 SyncUseFunction = item.syncUseFunction,
                 SyncDiscardFunction = item.syncDiscardFunction,
@@ -266,9 +262,9 @@ public struct StaticData
                 VerticalOffset = item.verticalOffset,
                 FloorYOffset = item.floorYOffset,
                 DropAheadOfPlayer = item.allowDroppingAheadOfPlayer,
-                RestingRotation = item.restingRotation,
-                RotationOffset = item.rotationOffset,
-                PositionOffset = item.positionOffset,
+                RestingRotation = UnityUtil.Import(item.restingRotation),
+                RotationOffset = UnityUtil.Import(item.rotationOffset),
+                PositionOffset = UnityUtil.Import(item.positionOffset),
                 MeshOffset = item.meshOffset,
                 MeshVariants = toSArr(item.meshVariants),
                 MaterialVariants = toSArr(item.materialVariants),
@@ -294,7 +290,7 @@ public struct StaticData
                 return new Animation
                 {
                     Name = miscAnimation.AnimString,
-                    AudioClip = miscAnimation.AnimVoiceclip?.name ?? string.Empty,
+                    AudioClip = miscAnimation.AnimVoiceclip?.ToString() ?? string.Empty,
                     Length = miscAnimation.AnimLength,
                     Priority = miscAnimation.priority,
                 };
@@ -403,11 +399,11 @@ public struct StaticData
             return new EnemyType
             {
                 Name = enemyType.enemyName,
-                PrefabName = enemyType.enemyPrefab?.name ?? string.Empty,
-                ProbabilityCurve = enemyType.probabilityCurve,
+                PrefabName = enemyType.enemyPrefab?.ToString() ?? string.Empty,
+                ProbabilityCurve = UnityUtil.Import(enemyType.probabilityCurve),
                 Disabled = enemyType.spawningDisabled,
                 SpawnFromWeeds = enemyType.spawnFromWeeds,
-                SpawnFalloff = enemyType.numberSpawnedFalloff,
+                SpawnFalloff = UnityUtil.Import(enemyType.numberSpawnedFalloff),
                 UseSpawnFalloff = enemyType.useNumberSpawnedFalloff,
                 SpawnInGroups = enemyType.spawnInGroupsOf,
                 RequireNestObject = enemyType.requireNestObjectsToSpawn,
@@ -434,16 +430,16 @@ public struct StaticData
                 WaterType = enemyType.WaterType,
                 TimeToPlayAudio = enemyType.timeToPlayAudio,
                 LoudnessMultiplier = enemyType.loudnessMultiplier,
-                OverrideVentSFX = enemyType.overrideVentSFX?.name ?? string.Empty,
-                NestPrefabName = enemyType.nestSpawnPrefab?.name ?? string.Empty,
+                OverrideVentSFX = enemyType.overrideVentSFX?.ToString() ?? string.Empty,
+                NestPrefabName = enemyType.nestSpawnPrefab?.ToString() ?? string.Empty,
                 NestPrefabWidth = enemyType.nestSpawnPrefabWidth,
                 NestDistanceFromShip = enemyType.nestDistanceFromShip,
                 UseMinEnemyThresholdForNest = enemyType.useMinEnemyThresholdForNest,
                 MinEnemiesToSpawnNest = enemyType.minEnemiesToSpawnNest,
-                HitBodySFX = enemyType.hitBodySFX?.name ?? string.Empty,
-                HitEnemyVoiceSFX = enemyType.hitEnemyVoiceSFX?.name ?? string.Empty,
-                DeathSFX = enemyType.deathSFX?.name ?? string.Empty,
-                StunSFX = enemyType.stunSFX?.name ?? string.Empty,
+                HitBodySFX = enemyType.hitBodySFX?.ToString() ?? string.Empty,
+                HitEnemyVoiceSFX = enemyType.hitEnemyVoiceSFX?.ToString() ?? string.Empty,
+                DeathSFX = enemyType.deathSFX?.ToString() ?? string.Empty,
+                StunSFX = enemyType.stunSFX?.ToString() ?? string.Empty,
                 MiscAudioClips = toSArr(enemyType.audioClips),
                 MiscAnimations = enemyType.miscAnimations?.Select(Animation.Import).ToArray() ?? [],
                 _imported_from = enemyType,
@@ -471,7 +467,7 @@ public struct StaticData
                     Weather = randomWeatherWithVariables.weatherType,
                     Variable1 = randomWeatherWithVariables.weatherVariable,
                     Variable2 = randomWeatherWithVariables.weatherVariable2,
-                    Color = randomWeatherWithVariables.weatherVariableColor,
+                    Color = UnityUtil.Import(randomWeatherWithVariables.weatherVariableColor),
                 };
             }
         }
@@ -489,7 +485,7 @@ public struct StaticData
                 {
                     return new WeightedAudioClip
                     {
-                        AudioClip = randomAudioClip.audioClip?.name ?? string.Empty,
+                        AudioClip = randomAudioClip.audioClip?.ToString() ?? string.Empty,
                         Rarity = randomAudioClip.chance,
                     };
                 }
@@ -566,7 +562,7 @@ public struct StaticData
                         return new HazardType();
                     return new HazardType
                     {
-                        PrefabName = indoorMapHazardType.prefabToSpawn?.name ?? string.Empty,
+                        PrefabName = indoorMapHazardType.prefabToSpawn?.ToString() ?? string.Empty,
                         SpawnFacingAwayFromWall = indoorMapHazardType.spawnFacingAwayFromWall,
                         SpawnFacingWall = indoorMapHazardType.spawnFacingWall,
                         SpawnWithBackToWall = indoorMapHazardType.spawnWithBackToWall,
@@ -593,7 +589,7 @@ public struct StaticData
                 return new InsideHazard
                 {
                     Hazard = HazardType.Import(indoorMapHazard.hazardType),
-                    SpawnAmount = indoorMapHazard.numberToSpawn,
+                    SpawnAmount = UnityUtil.Import(indoorMapHazard.numberToSpawn),
                 };
             }
         }
@@ -615,12 +611,13 @@ public struct StaticData
                         return new HazardType();
                     return new HazardType
                     {
-                        PrefabName = spawnableOutsideObject.prefabToSpawn?.name ?? string.Empty,
+                        PrefabName =
+                            spawnableOutsideObject.prefabToSpawn?.ToString() ?? string.Empty,
                         SpawnFacingAwayFromWall = spawnableOutsideObject.spawnFacingAwayFromWall,
                         ObjectWidth = spawnableOutsideObject.objectWidth,
                         DestroyTrees = spawnableOutsideObject.destroyTrees,
                         SpawnableFloorTags = spawnableOutsideObject.spawnableFloorTags,
-                        RotationOffset = spawnableOutsideObject.rotationOffset,
+                        RotationOffset = UnityUtil.Import(spawnableOutsideObject.rotationOffset),
                     };
                 }
             }
@@ -639,7 +636,7 @@ public struct StaticData
                 return new OutsideHazard
                 {
                     Hazard = HazardType.Import(spawnableOutsideObjectWithRarity.spawnableObject),
-                    SpawnAmount = spawnableOutsideObjectWithRarity.randomAmount,
+                    SpawnAmount = UnityUtil.Import(spawnableOutsideObjectWithRarity.randomAmount),
                 };
             }
         }
@@ -759,7 +756,7 @@ public struct StaticData
                     LevelDescription = selectableLevel.LevelDescription,
                     RiskLevel = selectableLevel.riskLevel,
                     LandingTime = selectableLevel.timeToArrive,
-                    VideoPreview = selectableLevel.videoReel?.name ?? string.Empty,
+                    VideoPreview = selectableLevel.videoReel?.ToString() ?? string.Empty,
                     LevelIcon = selectableLevel.levelIconString,
                     HasTime = selectableLevel.planetHasTime,
                     OffsetFromGlobalTime = selectableLevel.OffsetFromGlobalTime,
@@ -811,12 +808,15 @@ public struct StaticData
                     },
                     OutsideEnemies = toEArr(selectableLevel.OutsideEnemies),
                     DaytimeEnemies = toEArr(selectableLevel.DaytimeEnemies),
-                    InsideEnemySpawnChanceThroughoutDay =
-                        selectableLevel.enemySpawnChanceThroughoutDay,
-                    OutsideEnemySpawnChanceThroughoutDay =
-                        selectableLevel.outsideEnemySpawnChanceThroughDay,
-                    DaytimeEnemySpawnChanceThroughoutDay =
-                        selectableLevel.daytimeEnemySpawnChanceThroughDay,
+                    InsideEnemySpawnChanceThroughoutDay = UnityUtil.Import(
+                        selectableLevel.enemySpawnChanceThroughoutDay
+                    ),
+                    OutsideEnemySpawnChanceThroughoutDay = UnityUtil.Import(
+                        selectableLevel.outsideEnemySpawnChanceThroughDay
+                    ),
+                    DaytimeEnemySpawnChanceThroughoutDay = UnityUtil.Import(
+                        selectableLevel.daytimeEnemySpawnChanceThroughDay
+                    ),
                     EnemySpawnProbabilityRange = selectableLevel.spawnProbabilityRange,
                     DaytimeEnemySpawnProbabilityRange =
                         selectableLevel.daytimeEnemiesProbabilityRange,
