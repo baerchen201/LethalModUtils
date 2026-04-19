@@ -80,7 +80,7 @@ public class LethalModUtils : BaseUnityPlugin
             using var writer = new StreamWriter(f, Encoding.UTF8);
             using var jsonWriter = new JsonTextWriter(writer);
             StaticData
-                .Import(
+                .ImportUtil.Import(
                     GameNetworkManager.Instance?.gameVersionNum ?? -1,
                     __instance.allItemsList,
                     __instance.levels

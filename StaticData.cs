@@ -16,8 +16,10 @@ public struct StaticData
         return enumerable?.Select(i => i?.ToString() ?? string.Empty).ToArray() ?? [];
     }
 
-    public static class UnityUtil
+    public static class ImportUtil
     {
+        #region UnityEngine
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Keyframe ToUnity(AnimationCurve.Keyframe keyframe)
         {
@@ -91,6 +93,403 @@ public struct StaticData
                 z = vector3.z,
             };
         }
+
+        #endregion
+
+        #region Assembly-CSharp
+
+        public static ItemType Import(Item item)
+        {
+            if (!item)
+                return new ItemType();
+            return new ItemType
+            {
+                Id = item.itemId,
+                Name = item.itemName,
+                LockedInDemo = item.lockedInDemo,
+                PrefabName = item.spawnPrefab?.ToString() ?? string.Empty,
+                ItemIcon = item.itemIcon?.ToString() ?? string.Empty,
+                SpawnPositionTypes =
+                    item.spawnPositionTypes?.Select(i => i.itemSpawnTypeName).ToArray() ?? [],
+                TwoHanded = item.twoHanded,
+                TwoHandedAnimation = item.twoHandedAnimation,
+                DisableHandsOnWall = item.disableHandsOnWall,
+                CanBeGrabbedBeforeGameStart = item.canBeGrabbedBeforeGameStart,
+                DisallowUtilitySlot = item.disallowUtilitySlot,
+                Weight = item.weight,
+                IsTrigger = item.itemIsTrigger,
+                HoldButtonUse = item.holdButtonUse,
+                SpawnsOnGround = item.itemSpawnsOnGround,
+                IsConductive = item.isConductiveMetal,
+                IsScrap = item.isScrap,
+                Value = item.creditsWorth,
+                MaxValue = item.maxValue,
+                MinValue = item.minValue,
+                MaxSalePercentage = item.highestSalePercentage,
+                UsesBattery = item.requiresBattery,
+                BatteryUsage = item.batteryUsage,
+                AutomaticallySetUsingPower = item.automaticallySetUsingPower,
+                GrabAnimation = item.grabAnim,
+                GrabAnimationTime = item.grabAnimationTime,
+                UseAnimation = item.useAnim,
+                PocketAnimation = item.pocketAnim,
+                ThrowAnimation = item.throwAnim,
+                GrabSFX = item.grabSFX?.ToString() ?? string.Empty,
+                DropSFX = item.dropSFX?.ToString() ?? string.Empty,
+                PocketSFX = item.pocketSFX?.ToString() ?? string.Empty,
+                ThrowSFX = item.throwSFX?.ToString() ?? string.Empty,
+                SyncGrabFunction = item.syncGrabFunction,
+                SyncUseFunction = item.syncUseFunction,
+                SyncDiscardFunction = item.syncDiscardFunction,
+                SyncInteractLRFunction = item.syncInteractLRFunction,
+                SaveItemVariable = item.saveItemVariable,
+                IsWeapon = item.isDefensiveWeapon,
+                ToolTips = item.toolTips,
+                VerticalOffset = item.verticalOffset,
+                FloorYOffset = item.floorYOffset,
+                DropAheadOfPlayer = item.allowDroppingAheadOfPlayer,
+                RestingRotation = Import(item.restingRotation),
+                RotationOffset = Import(item.rotationOffset),
+                PositionOffset = Import(item.positionOffset),
+                MeshOffset = item.meshOffset,
+                MeshVariants = toSArr(item.meshVariants),
+                MaterialVariants = toSArr(item.materialVariants),
+                ClinkAudios = toSArr(item.clinkAudios),
+                UsableInSpecialAnimations = false,
+                CanBeInspected = false,
+                _imported_from = item,
+            };
+        }
+
+        public static EnemyType.Animation Import(MiscAnimation miscAnimation)
+        {
+            return new EnemyType.Animation
+            {
+                Name = miscAnimation.AnimString,
+                AudioClip = miscAnimation.AnimVoiceclip?.ToString() ?? string.Empty,
+                Length = miscAnimation.AnimLength,
+                Priority = miscAnimation.priority,
+            };
+        }
+
+        public static EnemyType Import(global::EnemyType enemyType)
+        {
+            if (!enemyType)
+                return new EnemyType();
+            return new EnemyType
+            {
+                Name = enemyType.enemyName,
+                PrefabName = enemyType.enemyPrefab?.ToString() ?? string.Empty,
+                ProbabilityCurve = Import(enemyType.probabilityCurve),
+                Disabled = enemyType.spawningDisabled,
+                SpawnFromWeeds = enemyType.spawnFromWeeds,
+                SpawnFalloff = Import(enemyType.numberSpawnedFalloff),
+                UseSpawnFalloff = enemyType.useNumberSpawnedFalloff,
+                SpawnInGroups = enemyType.spawnInGroupsOf,
+                RequireNestObject = enemyType.requireNestObjectsToSpawn,
+                PowerLevel = enemyType.PowerLevel,
+                DiversityPowerLevel = enemyType.DiversityPowerLevel,
+                MaxCount = enemyType.MaxCount,
+                IsOutsideEnemy = enemyType.isOutsideEnemy,
+                IsDaytimeEnemy = enemyType.isDaytimeEnemy,
+                IncreasedChanceInterior = enemyType.increasedChanceInterior,
+                NormalizedTimeInDayToLeave = enemyType.normalizedTimeInDayToLeave,
+                StunTimeMultiplier = enemyType.stunTimeMultiplier,
+                DoorSpeedMultiplier = enemyType.doorSpeedMultiplier,
+                StunGameDifficultyMultiplier = enemyType.stunGameDifficultyMultiplier,
+                CanBeStunned = enemyType.canBeStunned,
+                CanDie = enemyType.canDie,
+                CanBeDestroyed = enemyType.canBeDestroyed,
+                DestroyOnDeath = enemyType.destroyOnDeath,
+                CanSeeThroughFog = enemyType.canSeeThroughFog,
+                DisableAnimatorWhenFar = enemyType.disableAnimatorWhenFar,
+                PushPlayerForce = enemyType.pushPlayerForce,
+                PushPlayerDistance = enemyType.pushPlayerDistance,
+                SizeLimit = enemyType.SizeLimit,
+                EnemySize = enemyType.EnemySize,
+                WaterType = enemyType.WaterType,
+                TimeToPlayAudio = enemyType.timeToPlayAudio,
+                LoudnessMultiplier = enemyType.loudnessMultiplier,
+                OverrideVentSFX = enemyType.overrideVentSFX?.ToString() ?? string.Empty,
+                NestPrefabName = enemyType.nestSpawnPrefab?.ToString() ?? string.Empty,
+                NestPrefabWidth = enemyType.nestSpawnPrefabWidth,
+                NestDistanceFromShip = enemyType.nestDistanceFromShip,
+                UseMinEnemyThresholdForNest = enemyType.useMinEnemyThresholdForNest,
+                MinEnemiesToSpawnNest = enemyType.minEnemiesToSpawnNest,
+                HitBodySFX = enemyType.hitBodySFX?.ToString() ?? string.Empty,
+                HitEnemyVoiceSFX = enemyType.hitEnemyVoiceSFX?.ToString() ?? string.Empty,
+                DeathSFX = enemyType.deathSFX?.ToString() ?? string.Empty,
+                StunSFX = enemyType.stunSFX?.ToString() ?? string.Empty,
+                MiscAudioClips = toSArr(enemyType.audioClips),
+                MiscAnimations = enemyType.miscAnimations?.Select(Import).ToArray() ?? [],
+                _imported_from = enemyType,
+            };
+        }
+
+        public static Level.WeatherWithVariables Import(
+            RandomWeatherWithVariables randomWeatherWithVariables
+        )
+        {
+            return new Level.WeatherWithVariables
+            {
+                Weather = randomWeatherWithVariables.weatherType,
+                Variable1 = randomWeatherWithVariables.weatherVariable,
+                Variable2 = randomWeatherWithVariables.weatherVariable2,
+                Color = Import(randomWeatherWithVariables.weatherVariableColor),
+            };
+        }
+
+        public static Level.LevelAmbience.WeightedAudioClip Import(RandomAudioClip randomAudioClip)
+        {
+            return new Level.LevelAmbience.WeightedAudioClip
+            {
+                AudioClip = randomAudioClip.audioClip?.ToString() ?? string.Empty,
+                Rarity = randomAudioClip.chance,
+            };
+        }
+
+        public static Level.LevelAmbience Import(LevelAmbienceLibrary levelAmbienceLibrary)
+        {
+            if (!levelAmbienceLibrary)
+                return new Level.LevelAmbience();
+            return new Level.LevelAmbience
+            {
+                insanityMusicAudios = toSArr(levelAmbienceLibrary.insanityMusicAudios),
+                insideAmbience = toSArr(levelAmbienceLibrary.insideAmbience),
+                insideAmbienceInsanity = toWArr(levelAmbienceLibrary.insideAmbienceInsanity),
+                shipAmbience = toSArr(levelAmbienceLibrary.shipAmbience),
+                shipAmbienceInsanity = toWArr(levelAmbienceLibrary.shipAmbienceInsanity),
+                outsideAmbience = toSArr(levelAmbienceLibrary.outsideAmbience),
+                outsideAmbienceInsanity = toWArr(levelAmbienceLibrary.outsideAmbienceInsanity),
+            };
+
+            Level.LevelAmbience.WeightedAudioClip[] toWArr(IEnumerable<RandomAudioClip>? enumerable)
+            {
+                return enumerable?.Select(Import).ToArray() ?? [];
+            }
+        }
+
+        public static Level.Interior Import(IntWithRarity intWithRarity)
+        {
+            return new Level.Interior
+            {
+                Id = intWithRarity.id,
+                Rarity = intWithRarity.rarity,
+                OverridesLevelAmbience = intWithRarity.overrideLevelAmbience,
+                LevelAmbience = Import(intWithRarity.overrideLevelAmbience),
+            };
+        }
+
+        public static Level.InsideHazard.HazardType Import(IndoorMapHazardType indoorMapHazardType)
+        {
+            if (!indoorMapHazardType)
+                return new Level.InsideHazard.HazardType();
+            return new Level.InsideHazard.HazardType
+            {
+                PrefabName = indoorMapHazardType.prefabToSpawn?.ToString() ?? string.Empty,
+                SpawnFacingAwayFromWall = indoorMapHazardType.spawnFacingAwayFromWall,
+                SpawnFacingWall = indoorMapHazardType.spawnFacingWall,
+                SpawnWithBackToWall = indoorMapHazardType.spawnWithBackToWall,
+                SpawnWithBackFlushAgainstWall = indoorMapHazardType.spawnWithBackFlushAgainstWall,
+                RequireDistanceBetweenSpawns = indoorMapHazardType.requireDistanceBetweenSpawns,
+                DisallowSpawningNearEntrances = indoorMapHazardType.disallowSpawningNearEntrances,
+                SpawnInMineshaft = indoorMapHazardType.allowInMineshaft,
+            };
+        }
+
+        public static Level.InsideHazard Import(IndoorMapHazard indoorMapHazard)
+        {
+            return new Level.InsideHazard
+            {
+                Hazard = Import(indoorMapHazard.hazardType),
+                SpawnAmount = Import(indoorMapHazard.numberToSpawn),
+            };
+        }
+
+        public static Level.OutsideHazard.HazardType Import(
+            SpawnableOutsideObject spawnableOutsideObject
+        )
+        {
+            if (!spawnableOutsideObject)
+                return new Level.OutsideHazard.HazardType();
+            return new Level.OutsideHazard.HazardType
+            {
+                PrefabName = spawnableOutsideObject.prefabToSpawn?.ToString() ?? string.Empty,
+                SpawnFacingAwayFromWall = spawnableOutsideObject.spawnFacingAwayFromWall,
+                ObjectWidth = spawnableOutsideObject.objectWidth,
+                DestroyTrees = spawnableOutsideObject.destroyTrees,
+                SpawnableFloorTags = spawnableOutsideObject.spawnableFloorTags,
+                RotationOffset = Import(spawnableOutsideObject.rotationOffset),
+            };
+        }
+
+        public static Level.OutsideHazard Import(
+            SpawnableOutsideObjectWithRarity spawnableOutsideObjectWithRarity
+        )
+        {
+            return new Level.OutsideHazard
+            {
+                Hazard = Import(spawnableOutsideObjectWithRarity.spawnableObject),
+                SpawnAmount = Import(spawnableOutsideObjectWithRarity.randomAmount),
+            };
+        }
+
+        public static StaticData Import(
+            int gameVersion,
+            AllItemsList allItemsList,
+            SelectableLevel[] selectableLevels
+        )
+        {
+            List<ItemType> ItemTable = [];
+            List<EnemyType> EnemyTable = [];
+            List<Level> Levels = [];
+
+            if (allItemsList)
+                foreach (var item in allItemsList.itemsList)
+                    GetOrImportItemType(item);
+
+            foreach (var selectableLevel in selectableLevels)
+                Levels.Add(
+                    new Level
+                    {
+                        Name = selectableLevel.PlanetName,
+                        SceneName = selectableLevel.sceneName,
+                        LockedForDemo = selectableLevel.lockedForDemo,
+                        SpawnEnemiesAndScrap = selectableLevel.spawnEnemiesAndScrap,
+                        LevelDescription = selectableLevel.LevelDescription,
+                        RiskLevel = selectableLevel.riskLevel,
+                        LandingTime = selectableLevel.timeToArrive,
+                        VideoPreview = selectableLevel.videoReel?.ToString() ?? string.Empty,
+                        LevelIcon = selectableLevel.levelIconString,
+                        HasTime = selectableLevel.planetHasTime,
+                        OffsetFromGlobalTime = selectableLevel.OffsetFromGlobalTime,
+                        DaySpeedMultiplier = selectableLevel.DaySpeedMultiplier,
+                        HasStaticWeather = selectableLevel.overrideWeather,
+                        StaticWeather = selectableLevel.overrideWeatherType,
+                        Weathers = selectableLevel.randomWeathers.Select(Import).ToArray(),
+                        InteriorSizeMultiplier = selectableLevel.factorySizeMultiplier,
+                        Interiors = selectableLevel.dungeonFlowTypes.Select(Import).ToArray(),
+                        HasAmbienceClips = selectableLevel.levelAmbienceClips,
+                        AmbienceClips = Import(selectableLevel.levelAmbienceClips),
+                        SpawnableInsideObjects = selectableLevel
+                            .indoorMapHazards.Select(Import)
+                            .ToArray(),
+                        SpawnableOutsideObjects = selectableLevel
+                            .spawnableOutsideObjects.Select(Import)
+                            .ToArray(),
+                        CanSpawnMold = selectableLevel.canSpawnMold,
+                        MoldSpreadIterations = selectableLevel.moldSpreadIterations,
+                        MoldStartPosition = selectableLevel.moldStartPosition,
+                        MoldType = selectableLevel.moldType,
+                        SpawnableScrap = selectableLevel
+                            .spawnableScrap.Select(i => new Level.SpawnableItem
+                            {
+                                ItemIndex = GetOrImportItemType(i.spawnableItem),
+                                Rarity = i.rarity,
+                            })
+                            .ToArray(),
+                        MinScrap = selectableLevel.minScrap,
+                        MaxScrap = selectableLevel.maxScrap,
+                        MinTotalScrapValue = selectableLevel.minTotalScrapValue,
+                        MaxTotalScrapValue = selectableLevel.maxTotalScrapValue,
+                        MaxEnemyPowerCount = selectableLevel.maxEnemyPowerCount,
+                        MaxOutsideEnemyPowerCount = selectableLevel.maxOutsideEnemyPowerCount,
+                        MaxDaytimeEnemyPowerCount = selectableLevel.maxDaytimeEnemyPowerCount,
+                        MaxInsideDiversityPowerCount = selectableLevel.maxInsideDiversityPowerCount,
+                        MaxOutsideDiversityPowerCount =
+                            selectableLevel.maxOutsideDiversityPowerCount,
+                        InsideEnemies = toEArr(selectableLevel.Enemies),
+                        SpecialEnemyRarity = new Level.OverrideSpawnableEnemy
+                        {
+                            EnemyIndex = GetOrImportEnemyType(
+                                selectableLevel.specialEnemyRarity.overrideEnemy
+                            ),
+                            Chance = selectableLevel.specialEnemyRarity.percentageChance,
+                        },
+                        OutsideEnemies = toEArr(selectableLevel.OutsideEnemies),
+                        DaytimeEnemies = toEArr(selectableLevel.DaytimeEnemies),
+                        InsideEnemySpawnChanceThroughoutDay = Import(
+                            selectableLevel.enemySpawnChanceThroughoutDay
+                        ),
+                        OutsideEnemySpawnChanceThroughoutDay = Import(
+                            selectableLevel.outsideEnemySpawnChanceThroughDay
+                        ),
+                        DaytimeEnemySpawnChanceThroughoutDay = Import(
+                            selectableLevel.daytimeEnemySpawnChanceThroughDay
+                        ),
+                        EnemySpawnProbabilityRange = selectableLevel.spawnProbabilityRange,
+                        DaytimeEnemySpawnProbabilityRange =
+                            selectableLevel.daytimeEnemiesProbabilityRange,
+                        SnowFootprints = selectableLevel.levelIncludesSnowFootprints,
+                    }
+                );
+
+            return new StaticData
+            {
+                GameVersion = gameVersion,
+                ModVersion = MyPluginInfo.PLUGIN_VERSION,
+                ImportTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+
+                NavSizeLimitValues = enumToDict<NavSizeLimit>(),
+                EnemySizeValues = enumToDict<EnemySize>(),
+                EnemyWaterTypeValues = enumToDict<EnemyWaterType>(),
+                LevelWeatherTypeValues = enumToDict<LevelWeatherType>(),
+
+                ItemTable = ItemTable.ToArray(),
+                EnemyTable = EnemyTable.ToArray(),
+                Levels = Levels.ToArray(),
+            };
+
+            int GetOrImportItemType(Item item)
+            {
+                var i = 0;
+                foreach (var itemType in ItemTable)
+                    if (itemType._imported_from != null && item == (Item)itemType._imported_from)
+                        return i;
+                    else
+                        ++i;
+                ItemTable.Add(Import(item));
+                return i;
+            }
+
+            int GetOrImportEnemyType(global::EnemyType gEnemyType)
+            {
+                var i = 0;
+                foreach (var enemyType in EnemyTable)
+                    if (
+                        enemyType._imported_from != null
+                        && gEnemyType == (global::EnemyType)enemyType._imported_from
+                    )
+                        return i;
+                    else
+                        ++i;
+                EnemyTable.Add(Import(gEnemyType));
+                return i;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            Level.SpawnableEnemy[] toEArr(IEnumerable<SpawnableEnemyWithRarity>? enumerable)
+            {
+                return enumerable
+                        ?.Select(i => new Level.SpawnableEnemy
+                        {
+                            EnemyIndex = GetOrImportEnemyType(i.enemyType),
+                            Rarity = i.rarity,
+                        })
+                        .ToArray() ?? [];
+            }
+
+            Dictionary<int, string> enumToDict<T>()
+                where T : struct, Enum
+            {
+                return ((int[])Enum.GetValues(typeof(T))).ToDictionary(
+                    v => v,
+                    v => Enum.GetName(typeof(T), v)
+                );
+            }
+        }
+
+        #endregion
     }
 
     public struct AnimationCurve
@@ -210,70 +609,7 @@ public struct StaticData
         public bool CanBeInspected;
 
         [JsonIgnore]
-        internal Item? _imported_from;
-
-        public static ItemType Import(Item item)
-        {
-            if (!item)
-                return new ItemType();
-            return new ItemType
-            {
-                Id = item.itemId,
-                Name = item.itemName,
-                LockedInDemo = item.lockedInDemo,
-                PrefabName = item.spawnPrefab?.ToString() ?? string.Empty,
-                ItemIcon = item.itemIcon?.ToString() ?? string.Empty,
-                SpawnPositionTypes =
-                    item.spawnPositionTypes?.Select(i => i.itemSpawnTypeName).ToArray() ?? [],
-                TwoHanded = item.twoHanded,
-                TwoHandedAnimation = item.twoHandedAnimation,
-                DisableHandsOnWall = item.disableHandsOnWall,
-                CanBeGrabbedBeforeGameStart = item.canBeGrabbedBeforeGameStart,
-                DisallowUtilitySlot = item.disallowUtilitySlot,
-                Weight = item.weight,
-                IsTrigger = item.itemIsTrigger,
-                HoldButtonUse = item.holdButtonUse,
-                SpawnsOnGround = item.itemSpawnsOnGround,
-                IsConductive = item.isConductiveMetal,
-                IsScrap = item.isScrap,
-                Value = item.creditsWorth,
-                MaxValue = item.maxValue,
-                MinValue = item.minValue,
-                MaxSalePercentage = item.highestSalePercentage,
-                UsesBattery = item.requiresBattery,
-                BatteryUsage = item.batteryUsage,
-                AutomaticallySetUsingPower = item.automaticallySetUsingPower,
-                GrabAnimation = item.grabAnim,
-                GrabAnimationTime = item.grabAnimationTime,
-                UseAnimation = item.useAnim,
-                PocketAnimation = item.pocketAnim,
-                ThrowAnimation = item.throwAnim,
-                GrabSFX = item.grabSFX?.ToString() ?? string.Empty,
-                DropSFX = item.dropSFX?.ToString() ?? string.Empty,
-                PocketSFX = item.pocketSFX?.ToString() ?? string.Empty,
-                ThrowSFX = item.throwSFX?.ToString() ?? string.Empty,
-                SyncGrabFunction = item.syncGrabFunction,
-                SyncUseFunction = item.syncUseFunction,
-                SyncDiscardFunction = item.syncDiscardFunction,
-                SyncInteractLRFunction = item.syncInteractLRFunction,
-                SaveItemVariable = item.saveItemVariable,
-                IsWeapon = item.isDefensiveWeapon,
-                ToolTips = item.toolTips,
-                VerticalOffset = item.verticalOffset,
-                FloorYOffset = item.floorYOffset,
-                DropAheadOfPlayer = item.allowDroppingAheadOfPlayer,
-                RestingRotation = UnityUtil.Import(item.restingRotation),
-                RotationOffset = UnityUtil.Import(item.rotationOffset),
-                PositionOffset = UnityUtil.Import(item.positionOffset),
-                MeshOffset = item.meshOffset,
-                MeshVariants = toSArr(item.meshVariants),
-                MaterialVariants = toSArr(item.materialVariants),
-                ClinkAudios = toSArr(item.clinkAudios),
-                UsableInSpecialAnimations = false,
-                CanBeInspected = false,
-                _imported_from = item,
-            };
-        }
+        internal object? _imported_from;
     }
 
     public struct EnemyType
@@ -284,17 +620,6 @@ public struct StaticData
             public string AudioClip;
             public float Length;
             public int Priority;
-
-            public static Animation Import(MiscAnimation miscAnimation)
-            {
-                return new Animation
-                {
-                    Name = miscAnimation.AnimString,
-                    AudioClip = miscAnimation.AnimVoiceclip?.ToString() ?? string.Empty,
-                    Length = miscAnimation.AnimLength,
-                    Priority = miscAnimation.priority,
-                };
-            }
         }
 
         public string Name;
@@ -390,61 +715,7 @@ public struct StaticData
         public Animation[] MiscAnimations;
 
         [JsonIgnore]
-        internal global::EnemyType? _imported_from;
-
-        public static EnemyType Import(global::EnemyType enemyType)
-        {
-            if (!enemyType)
-                return new EnemyType();
-            return new EnemyType
-            {
-                Name = enemyType.enemyName,
-                PrefabName = enemyType.enemyPrefab?.ToString() ?? string.Empty,
-                ProbabilityCurve = UnityUtil.Import(enemyType.probabilityCurve),
-                Disabled = enemyType.spawningDisabled,
-                SpawnFromWeeds = enemyType.spawnFromWeeds,
-                SpawnFalloff = UnityUtil.Import(enemyType.numberSpawnedFalloff),
-                UseSpawnFalloff = enemyType.useNumberSpawnedFalloff,
-                SpawnInGroups = enemyType.spawnInGroupsOf,
-                RequireNestObject = enemyType.requireNestObjectsToSpawn,
-                PowerLevel = enemyType.PowerLevel,
-                DiversityPowerLevel = enemyType.DiversityPowerLevel,
-                MaxCount = enemyType.MaxCount,
-                IsOutsideEnemy = enemyType.isOutsideEnemy,
-                IsDaytimeEnemy = enemyType.isDaytimeEnemy,
-                IncreasedChanceInterior = enemyType.increasedChanceInterior,
-                NormalizedTimeInDayToLeave = enemyType.normalizedTimeInDayToLeave,
-                StunTimeMultiplier = enemyType.stunTimeMultiplier,
-                DoorSpeedMultiplier = enemyType.doorSpeedMultiplier,
-                StunGameDifficultyMultiplier = enemyType.stunGameDifficultyMultiplier,
-                CanBeStunned = enemyType.canBeStunned,
-                CanDie = enemyType.canDie,
-                CanBeDestroyed = enemyType.canBeDestroyed,
-                DestroyOnDeath = enemyType.destroyOnDeath,
-                CanSeeThroughFog = enemyType.canSeeThroughFog,
-                DisableAnimatorWhenFar = enemyType.disableAnimatorWhenFar,
-                PushPlayerForce = enemyType.pushPlayerForce,
-                PushPlayerDistance = enemyType.pushPlayerDistance,
-                SizeLimit = enemyType.SizeLimit,
-                EnemySize = enemyType.EnemySize,
-                WaterType = enemyType.WaterType,
-                TimeToPlayAudio = enemyType.timeToPlayAudio,
-                LoudnessMultiplier = enemyType.loudnessMultiplier,
-                OverrideVentSFX = enemyType.overrideVentSFX?.ToString() ?? string.Empty,
-                NestPrefabName = enemyType.nestSpawnPrefab?.ToString() ?? string.Empty,
-                NestPrefabWidth = enemyType.nestSpawnPrefabWidth,
-                NestDistanceFromShip = enemyType.nestDistanceFromShip,
-                UseMinEnemyThresholdForNest = enemyType.useMinEnemyThresholdForNest,
-                MinEnemiesToSpawnNest = enemyType.minEnemiesToSpawnNest,
-                HitBodySFX = enemyType.hitBodySFX?.ToString() ?? string.Empty,
-                HitEnemyVoiceSFX = enemyType.hitEnemyVoiceSFX?.ToString() ?? string.Empty,
-                DeathSFX = enemyType.deathSFX?.ToString() ?? string.Empty,
-                StunSFX = enemyType.stunSFX?.ToString() ?? string.Empty,
-                MiscAudioClips = toSArr(enemyType.audioClips),
-                MiscAnimations = enemyType.miscAnimations?.Select(Animation.Import).ToArray() ?? [],
-                _imported_from = enemyType,
-            };
-        }
+        internal object? _imported_from;
     }
 
     public struct Level
@@ -457,19 +728,6 @@ public struct StaticData
 
             /// <remarks>Fog color</remarks>
             public Color Color;
-
-            public static WeatherWithVariables Import(
-                RandomWeatherWithVariables randomWeatherWithVariables
-            )
-            {
-                return new WeatherWithVariables
-                {
-                    Weather = randomWeatherWithVariables.weatherType,
-                    Variable1 = randomWeatherWithVariables.weatherVariable,
-                    Variable2 = randomWeatherWithVariables.weatherVariable2,
-                    Color = UnityUtil.Import(randomWeatherWithVariables.weatherVariableColor),
-                };
-            }
         }
 
         public struct LevelAmbience
@@ -480,15 +738,6 @@ public struct StaticData
 
                 /// <remarks>0 - 100</remarks>
                 public int Rarity;
-
-                public static WeightedAudioClip Import(RandomAudioClip randomAudioClip)
-                {
-                    return new WeightedAudioClip
-                    {
-                        AudioClip = randomAudioClip.audioClip?.ToString() ?? string.Empty,
-                        Rarity = randomAudioClip.chance,
-                    };
-                }
             }
 
             public string[] insanityMusicAudios;
@@ -498,27 +747,6 @@ public struct StaticData
             public WeightedAudioClip[] shipAmbienceInsanity;
             public string[] outsideAmbience;
             public WeightedAudioClip[] outsideAmbienceInsanity;
-
-            public static LevelAmbience Import(LevelAmbienceLibrary levelAmbienceLibrary)
-            {
-                if (!levelAmbienceLibrary)
-                    return new LevelAmbience();
-                return new LevelAmbience
-                {
-                    insanityMusicAudios = toSArr(levelAmbienceLibrary.insanityMusicAudios),
-                    insideAmbience = toSArr(levelAmbienceLibrary.insideAmbience),
-                    insideAmbienceInsanity = toWArr(levelAmbienceLibrary.insideAmbienceInsanity),
-                    shipAmbience = toSArr(levelAmbienceLibrary.shipAmbience),
-                    shipAmbienceInsanity = toWArr(levelAmbienceLibrary.shipAmbienceInsanity),
-                    outsideAmbience = toSArr(levelAmbienceLibrary.outsideAmbience),
-                    outsideAmbienceInsanity = toWArr(levelAmbienceLibrary.outsideAmbienceInsanity),
-                };
-
-                WeightedAudioClip[] toWArr(IEnumerable<RandomAudioClip>? enumerable)
-                {
-                    return enumerable?.Select(WeightedAudioClip.Import).ToArray() ?? [];
-                }
-            }
         }
 
         public struct Interior
@@ -530,17 +758,6 @@ public struct StaticData
 
             public bool OverridesLevelAmbience;
             public LevelAmbience LevelAmbience;
-
-            public static Interior Import(IntWithRarity intWithRarity)
-            {
-                return new Interior
-                {
-                    Id = intWithRarity.id,
-                    Rarity = intWithRarity.rarity,
-                    OverridesLevelAmbience = intWithRarity.overrideLevelAmbience,
-                    LevelAmbience = LevelAmbience.Import(intWithRarity.overrideLevelAmbience),
-                };
-            }
         }
 
         public struct InsideHazard
@@ -555,26 +772,6 @@ public struct StaticData
                 public bool RequireDistanceBetweenSpawns;
                 public bool DisallowSpawningNearEntrances;
                 public bool SpawnInMineshaft;
-
-                public static HazardType Import(IndoorMapHazardType indoorMapHazardType)
-                {
-                    if (!indoorMapHazardType)
-                        return new HazardType();
-                    return new HazardType
-                    {
-                        PrefabName = indoorMapHazardType.prefabToSpawn?.ToString() ?? string.Empty,
-                        SpawnFacingAwayFromWall = indoorMapHazardType.spawnFacingAwayFromWall,
-                        SpawnFacingWall = indoorMapHazardType.spawnFacingWall,
-                        SpawnWithBackToWall = indoorMapHazardType.spawnWithBackToWall,
-                        SpawnWithBackFlushAgainstWall =
-                            indoorMapHazardType.spawnWithBackFlushAgainstWall,
-                        RequireDistanceBetweenSpawns =
-                            indoorMapHazardType.requireDistanceBetweenSpawns,
-                        DisallowSpawningNearEntrances =
-                            indoorMapHazardType.disallowSpawningNearEntrances,
-                        SpawnInMineshaft = indoorMapHazardType.allowInMineshaft,
-                    };
-                }
             }
 
             public HazardType Hazard;
@@ -583,15 +780,6 @@ public struct StaticData
             ///     Y Axis is the amount to be spawned; X axis should be from 0 to 1 and is randomly picked from.
             /// </summary>
             public AnimationCurve SpawnAmount;
-
-            public static InsideHazard Import(IndoorMapHazard indoorMapHazard)
-            {
-                return new InsideHazard
-                {
-                    Hazard = HazardType.Import(indoorMapHazard.hazardType),
-                    SpawnAmount = UnityUtil.Import(indoorMapHazard.numberToSpawn),
-                };
-            }
         }
 
         public struct OutsideHazard
@@ -604,22 +792,6 @@ public struct StaticData
                 public bool DestroyTrees;
                 public string[] SpawnableFloorTags;
                 public Vector3 RotationOffset;
-
-                public static HazardType Import(SpawnableOutsideObject spawnableOutsideObject)
-                {
-                    if (!spawnableOutsideObject)
-                        return new HazardType();
-                    return new HazardType
-                    {
-                        PrefabName =
-                            spawnableOutsideObject.prefabToSpawn?.ToString() ?? string.Empty,
-                        SpawnFacingAwayFromWall = spawnableOutsideObject.spawnFacingAwayFromWall,
-                        ObjectWidth = spawnableOutsideObject.objectWidth,
-                        DestroyTrees = spawnableOutsideObject.destroyTrees,
-                        SpawnableFloorTags = spawnableOutsideObject.spawnableFloorTags,
-                        RotationOffset = UnityUtil.Import(spawnableOutsideObject.rotationOffset),
-                    };
-                }
             }
 
             public HazardType Hazard;
@@ -628,17 +800,6 @@ public struct StaticData
             ///     Y Axis is the amount to be spawned; X axis should be from 0 to 1 and is randomly picked from.
             /// </summary>
             public AnimationCurve SpawnAmount;
-
-            public static OutsideHazard Import(
-                SpawnableOutsideObjectWithRarity spawnableOutsideObjectWithRarity
-            )
-            {
-                return new OutsideHazard
-                {
-                    Hazard = HazardType.Import(spawnableOutsideObjectWithRarity.spawnableObject),
-                    SpawnAmount = UnityUtil.Import(spawnableOutsideObjectWithRarity.randomAmount),
-                };
-            }
         }
 
         public struct SpawnableItem
@@ -727,150 +888,14 @@ public struct StaticData
     public string ModVersion;
     public long ImportTime;
 
+    public Dictionary<int, string> NavSizeLimitValues;
+    public Dictionary<int, string> EnemySizeValues;
+    public Dictionary<int, string> EnemyWaterTypeValues;
+    public Dictionary<int, string> LevelWeatherTypeValues;
+
     public ItemType[] ItemTable;
     public EnemyType[] EnemyTable;
     public Level[] Levels;
-
-    public static StaticData Import(
-        int gameVersion,
-        AllItemsList allItemsList,
-        SelectableLevel[] selectableLevels
-    )
-    {
-        List<ItemType> ItemTable = [];
-        List<EnemyType> EnemyTable = [];
-        List<Level> Levels = [];
-
-        if (allItemsList)
-            foreach (var item in allItemsList.itemsList)
-                GetOrImportItemType(item);
-
-        foreach (var selectableLevel in selectableLevels)
-            Levels.Add(
-                new Level
-                {
-                    Name = selectableLevel.PlanetName,
-                    SceneName = selectableLevel.sceneName,
-                    LockedForDemo = selectableLevel.lockedForDemo,
-                    SpawnEnemiesAndScrap = selectableLevel.spawnEnemiesAndScrap,
-                    LevelDescription = selectableLevel.LevelDescription,
-                    RiskLevel = selectableLevel.riskLevel,
-                    LandingTime = selectableLevel.timeToArrive,
-                    VideoPreview = selectableLevel.videoReel?.ToString() ?? string.Empty,
-                    LevelIcon = selectableLevel.levelIconString,
-                    HasTime = selectableLevel.planetHasTime,
-                    OffsetFromGlobalTime = selectableLevel.OffsetFromGlobalTime,
-                    DaySpeedMultiplier = selectableLevel.DaySpeedMultiplier,
-                    HasStaticWeather = selectableLevel.overrideWeather,
-                    StaticWeather = selectableLevel.overrideWeatherType,
-                    Weathers = selectableLevel
-                        .randomWeathers.Select(Level.WeatherWithVariables.Import)
-                        .ToArray(),
-                    InteriorSizeMultiplier = selectableLevel.factorySizeMultiplier,
-                    Interiors = selectableLevel
-                        .dungeonFlowTypes.Select(Level.Interior.Import)
-                        .ToArray(),
-                    HasAmbienceClips = selectableLevel.levelAmbienceClips,
-                    AmbienceClips = Level.LevelAmbience.Import(selectableLevel.levelAmbienceClips),
-                    SpawnableInsideObjects = selectableLevel
-                        .indoorMapHazards.Select(Level.InsideHazard.Import)
-                        .ToArray(),
-                    SpawnableOutsideObjects = selectableLevel
-                        .spawnableOutsideObjects.Select(Level.OutsideHazard.Import)
-                        .ToArray(),
-                    CanSpawnMold = selectableLevel.canSpawnMold,
-                    MoldSpreadIterations = selectableLevel.moldSpreadIterations,
-                    MoldStartPosition = selectableLevel.moldStartPosition,
-                    MoldType = selectableLevel.moldType,
-                    SpawnableScrap = selectableLevel
-                        .spawnableScrap.Select(i => new Level.SpawnableItem
-                        {
-                            ItemIndex = GetOrImportItemType(i.spawnableItem),
-                            Rarity = i.rarity,
-                        })
-                        .ToArray(),
-                    MinScrap = selectableLevel.minScrap,
-                    MaxScrap = selectableLevel.maxScrap,
-                    MinTotalScrapValue = selectableLevel.minTotalScrapValue,
-                    MaxTotalScrapValue = selectableLevel.maxTotalScrapValue,
-                    MaxEnemyPowerCount = selectableLevel.maxEnemyPowerCount,
-                    MaxOutsideEnemyPowerCount = selectableLevel.maxOutsideEnemyPowerCount,
-                    MaxDaytimeEnemyPowerCount = selectableLevel.maxDaytimeEnemyPowerCount,
-                    MaxInsideDiversityPowerCount = selectableLevel.maxInsideDiversityPowerCount,
-                    MaxOutsideDiversityPowerCount = selectableLevel.maxOutsideDiversityPowerCount,
-                    InsideEnemies = toEArr(selectableLevel.Enemies),
-                    SpecialEnemyRarity = new Level.OverrideSpawnableEnemy
-                    {
-                        EnemyIndex = GetOrImportEnemyType(
-                            selectableLevel.specialEnemyRarity.overrideEnemy
-                        ),
-                        Chance = selectableLevel.specialEnemyRarity.percentageChance,
-                    },
-                    OutsideEnemies = toEArr(selectableLevel.OutsideEnemies),
-                    DaytimeEnemies = toEArr(selectableLevel.DaytimeEnemies),
-                    InsideEnemySpawnChanceThroughoutDay = UnityUtil.Import(
-                        selectableLevel.enemySpawnChanceThroughoutDay
-                    ),
-                    OutsideEnemySpawnChanceThroughoutDay = UnityUtil.Import(
-                        selectableLevel.outsideEnemySpawnChanceThroughDay
-                    ),
-                    DaytimeEnemySpawnChanceThroughoutDay = UnityUtil.Import(
-                        selectableLevel.daytimeEnemySpawnChanceThroughDay
-                    ),
-                    EnemySpawnProbabilityRange = selectableLevel.spawnProbabilityRange,
-                    DaytimeEnemySpawnProbabilityRange =
-                        selectableLevel.daytimeEnemiesProbabilityRange,
-                    SnowFootprints = selectableLevel.levelIncludesSnowFootprints,
-                }
-            );
-
-        return new StaticData
-        {
-            GameVersion = gameVersion,
-            ModVersion = MyPluginInfo.PLUGIN_VERSION,
-            ImportTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-
-            ItemTable = ItemTable.ToArray(),
-            EnemyTable = EnemyTable.ToArray(),
-            Levels = Levels.ToArray(),
-        };
-
-        int GetOrImportItemType(Item item)
-        {
-            var i = 0;
-            foreach (var itemType in ItemTable)
-                if (item == itemType._imported_from)
-                    return i;
-                else
-                    ++i;
-            ItemTable.Add(ItemType.Import(item));
-            return i;
-        }
-
-        int GetOrImportEnemyType(global::EnemyType gEnemyType)
-        {
-            var i = 0;
-            foreach (var enemyType in EnemyTable)
-                if (gEnemyType == enemyType._imported_from)
-                    return i;
-                else
-                    ++i;
-            EnemyTable.Add(EnemyType.Import(gEnemyType));
-            return i;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        Level.SpawnableEnemy[] toEArr(IEnumerable<SpawnableEnemyWithRarity>? enumerable)
-        {
-            return enumerable
-                    ?.Select(i => new Level.SpawnableEnemy
-                    {
-                        EnemyIndex = GetOrImportEnemyType(i.enemyType),
-                        Rarity = i.rarity,
-                    })
-                    .ToArray() ?? [];
-        }
-    }
 
     public static StaticData Deserialize(JsonReader reader)
     {
