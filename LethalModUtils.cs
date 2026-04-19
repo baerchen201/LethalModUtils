@@ -43,7 +43,7 @@ public class LethalModUtils : BaseUnityPlugin
             exportStaticData.SettingChanged += (_, _) =>
             {
                 if (exportStaticData.Value && StartOfRound.Instance)
-                    ExportStaticData(StartOfRound.Instance);
+                    ExportStaticData();
             };
 
             const string AUDIO = "Audio";
@@ -65,7 +65,7 @@ public class LethalModUtils : BaseUnityPlugin
         }
     }
 
-    public void ExportStaticData(StartOfRound __instance)
+    public void ExportStaticData()
     {
         Logger.LogInfo("Requested static data export...");
         exportStaticData.Value = false;
@@ -81,9 +81,10 @@ public class LethalModUtils : BaseUnityPlugin
             using var jsonWriter = new JsonTextWriter(writer);
             StaticData
                 .ImportUtil.Import(
-                    GameNetworkManager.Instance?.gameVersionNum ?? -1,
-                    __instance.allItemsList,
-                    __instance.levels
+                    GameNetworkManager.Instance.gameVersionNum,
+                    StartOfRound.Instance.allItemsList,
+                    StartOfRound.Instance.levels,
+                    RoundManager.Instance.dungeonFlowTypes
                 )
                 .Serialize(jsonWriter);
             jsonWriter.Flush();

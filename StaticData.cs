@@ -98,6 +98,18 @@ public struct StaticData
 
         #region Assembly-CSharp
 
+        public static InteriorType Import(IndoorMapType indoorMapType)
+        {
+            return new InteriorType
+            {
+                Name = indoorMapType.dungeonFlow?.ToString() ?? string.Empty,
+                MapTileSize = indoorMapType.MapTileSize,
+                FirstTimeSFX = indoorMapType.firstTimeAudio?.ToString() ?? string.Empty,
+                RestrictBounds = Import(indoorMapType.restrictBounds),
+                CullingTileDepth = indoorMapType.cullingTileDepth,
+            };
+        }
+
         public static ItemType Import(Item item)
         {
             if (!item)
@@ -335,20 +347,21 @@ public struct StaticData
         }
 
         public static StaticData Import(
-            int gameVersion,
-            AllItemsList allItemsList,
-            SelectableLevel[] selectableLevels
+            int GameNetworkManager_gameVersionNum,
+            AllItemsList StartOfRound_allItemsList,
+            SelectableLevel[] StartOfRound_levels,
+            IndoorMapType[] RoundManager_dungeonFlowTypes
         )
         {
             List<ItemType> ItemTable = [];
             List<EnemyType> EnemyTable = [];
             List<Level> Levels = [];
 
-            if (allItemsList)
-                foreach (var item in allItemsList.itemsList)
+            if (StartOfRound_allItemsList)
+                foreach (var item in StartOfRound_allItemsList.itemsList)
                     GetOrImportItemType(item);
 
-            foreach (var selectableLevel in selectableLevels)
+            foreach (var selectableLevel in StartOfRound_levels)
                 Levels.Add(
                     new Level
                     {
@@ -426,7 +439,7 @@ public struct StaticData
 
             return new StaticData
             {
-                GameVersion = gameVersion,
+                GameVersion = GameNetworkManager_gameVersionNum,
                 ModVersion = MyPluginInfo.PLUGIN_VERSION,
                 ImportTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
 
@@ -434,6 +447,8 @@ public struct StaticData
                 EnemySizeValues = enumToDict<EnemySize>(),
                 EnemyWaterTypeValues = enumToDict<EnemyWaterType>(),
                 LevelWeatherTypeValues = enumToDict<LevelWeatherType>(),
+
+                Interiors = RoundManager_dungeonFlowTypes.Select(Import).ToArray(),
 
                 ItemTable = ItemTable.ToArray(),
                 EnemyTable = EnemyTable.ToArray(),
@@ -520,6 +535,15 @@ public struct StaticData
         public float x;
         public float y;
         public float z;
+    }
+
+    public struct InteriorType
+    {
+        public string Name;
+        public float MapTileSize;
+        public string FirstTimeSFX;
+        public Vector3 RestrictBounds;
+        public int CullingTileDepth;
     }
 
     public struct ItemType
@@ -893,6 +917,8 @@ public struct StaticData
     public Dictionary<int, string> EnemyWaterTypeValues;
     public Dictionary<int, string> LevelWeatherTypeValues;
 
+    public InteriorType[] Interiors;
+
     public ItemType[] ItemTable;
     public EnemyType[] EnemyTable;
     public Level[] Levels;
@@ -908,15 +934,15 @@ public struct StaticData
     }
 }
 
-[HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.Awake))]
-internal static class StartOfRound_Awake
+[HarmonyPatch(typeof(RoundManager), nameof(RoundManager.Awake))]
+internal static class RoundManager_Awake
 {
-    private static void Postfix(ref StartOfRound __instance)
+    private static void Postfix()
     {
         try
         {
             if (LethalModUtils.Instance.exportStaticData.Value)
-                LethalModUtils.Instance.ExportStaticData(__instance);
+                LethalModUtils.Instance.ExportStaticData();
         }
         catch (Exception e)
         {
