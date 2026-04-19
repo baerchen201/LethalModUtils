@@ -205,9 +205,9 @@ public struct StaticData
                 DisableAnimatorWhenFar = enemyType.disableAnimatorWhenFar,
                 PushPlayerForce = enemyType.pushPlayerForce,
                 PushPlayerDistance = enemyType.pushPlayerDistance,
-                SizeLimit = enemyType.SizeLimit,
-                EnemySize = enemyType.EnemySize,
-                WaterType = enemyType.WaterType,
+                SizeLimit = (int)enemyType.SizeLimit,
+                EnemySize = (int)enemyType.EnemySize,
+                WaterType = (int)enemyType.WaterType,
                 TimeToPlayAudio = enemyType.timeToPlayAudio,
                 LoudnessMultiplier = enemyType.loudnessMultiplier,
                 OverrideVentSFX = enemyType.overrideVentSFX?.ToString() ?? string.Empty,
@@ -232,7 +232,7 @@ public struct StaticData
         {
             return new Level.WeatherWithVariables
             {
-                Weather = randomWeatherWithVariables.weatherType,
+                Weather = (int)randomWeatherWithVariables.weatherType,
                 Variable1 = randomWeatherWithVariables.weatherVariable,
                 Variable2 = randomWeatherWithVariables.weatherVariable2,
                 Color = Import(randomWeatherWithVariables.weatherVariableColor),
@@ -365,7 +365,7 @@ public struct StaticData
                         OffsetFromGlobalTime = selectableLevel.OffsetFromGlobalTime,
                         DaySpeedMultiplier = selectableLevel.DaySpeedMultiplier,
                         HasStaticWeather = selectableLevel.overrideWeather,
-                        StaticWeather = selectableLevel.overrideWeatherType,
+                        StaticWeather = (int)selectableLevel.overrideWeatherType,
                         Weathers = selectableLevel.randomWeathers.Select(Import).ToArray(),
                         InteriorSizeMultiplier = selectableLevel.factorySizeMultiplier,
                         Interiors = selectableLevel.dungeonFlowTypes.Select(Import).ToArray(),
@@ -678,10 +678,10 @@ public struct StaticData
         /// <summary>
         ///     This determines where the enemy can navigate to and spawn at
         /// </summary>
-        public NavSizeLimit SizeLimit;
+        public int SizeLimit;
 
-        public EnemySize EnemySize;
-        public EnemyWaterType WaterType;
+        public int EnemySize;
+        public int WaterType;
 
         /// <summary>
         ///     Vent Properties
@@ -722,7 +722,7 @@ public struct StaticData
     {
         public struct WeatherWithVariables
         {
-            public LevelWeatherType Weather;
+            public int Weather;
             public int Variable1;
             public int Variable2;
 
@@ -842,7 +842,7 @@ public struct StaticData
         public float DaySpeedMultiplier;
 
         public bool HasStaticWeather;
-        public LevelWeatherType StaticWeather;
+        public int StaticWeather;
         public WeatherWithVariables[] Weathers;
 
         public float InteriorSizeMultiplier;
