@@ -350,6 +350,7 @@ public struct StaticData
             int GameNetworkManager_gameVersionNum,
             AllItemsList StartOfRound_allItemsList,
             SelectableLevel[] StartOfRound_levels,
+            UnityEngine.AnimationCurve StartOfRound_planetsWeatherRandomCurve,
             IndoorMapType[] RoundManager_dungeonFlowTypes
         )
         {
@@ -448,6 +449,7 @@ public struct StaticData
                 EnemyWaterTypeValues = enumToDict<EnemyWaterType>(),
                 LevelWeatherTypeValues = enumToDict<LevelWeatherType>(),
 
+                WeatherRandomCurve = Import(StartOfRound_planetsWeatherRandomCurve),
                 Interiors = RoundManager_dungeonFlowTypes.Select(Import).ToArray(),
 
                 ItemTable = ItemTable.ToArray(),
@@ -917,6 +919,7 @@ public struct StaticData
     public Dictionary<int, string> EnemyWaterTypeValues;
     public Dictionary<int, string> LevelWeatherTypeValues;
 
+    public AnimationCurve WeatherRandomCurve;
     public InteriorType[] Interiors;
 
     public ItemType[] ItemTable;

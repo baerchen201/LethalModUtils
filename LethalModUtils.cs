@@ -84,6 +84,7 @@ public class LethalModUtils : BaseUnityPlugin
                     GameNetworkManager.Instance.gameVersionNum,
                     StartOfRound.Instance.allItemsList,
                     StartOfRound.Instance.levels,
+                    StartOfRound.Instance.planetsWeatherRandomCurve,
                     RoundManager.Instance.dungeonFlowTypes
                 )
                 .Serialize(jsonWriter);
