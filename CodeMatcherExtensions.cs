@@ -11,10 +11,7 @@ public static class CodeMatcherExtensions
         return string.Join(';', matches.Select(i => i.ToString()));
     }
 
-    internal static CodeMatcher MatchForward(
-        this CodeMatcher codeMatcher,
-        params CodeMatch[] matches
-    )
+    public static CodeMatcher MatchForward(this CodeMatcher codeMatcher, params CodeMatch[] matches)
     {
         var pos = Math.Clamp(codeMatcher.Pos, 0, codeMatcher.Length - 1);
         if (codeMatcher.MatchForward(true, matches).IsInvalid)
@@ -31,7 +28,7 @@ public static class CodeMatcherExtensions
         return codeMatcher;
     }
 
-    internal static CodeMatcher MatchBack(this CodeMatcher codeMatcher, params CodeMatch[] matches)
+    public static CodeMatcher MatchBack(this CodeMatcher codeMatcher, params CodeMatch[] matches)
     {
         var pos = Math.Clamp(codeMatcher.Pos, 0, codeMatcher.Length - 1);
         if (codeMatcher.MatchBack(true, matches).IsInvalid)
@@ -48,8 +45,9 @@ public static class CodeMatcherExtensions
         return codeMatcher;
     }
 
-    [Obsolete] // Not Obsolete but should be removed before release
-    internal static CodeMatcher LogDebug(this CodeMatcher codeMatcher)
+    /// <remarks>Not Obsolete but should be removed before release</remarks>
+    [Obsolete]
+    public static CodeMatcher LogDebug(this CodeMatcher codeMatcher)
     {
         var pos = 0;
         LethalModUtils.Logger.LogDebug(
