@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -294,6 +295,7 @@ public class Image
 public static class Texture2DExtensions
 {
     /// <inheritdoc cref="Image.Texture2DToSprite" />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Sprite ToSprite(this Texture2D texture, bool centered = true)
     {
         return Image.Texture2DToSprite(texture, centered);

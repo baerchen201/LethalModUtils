@@ -4,7 +4,6 @@ using HarmonyLib;
 
 namespace LethalModUtils;
 
-// Copied from FunnyPlugin for use in public mods
 public static class CodeMatcherExtensions
 {
     private static string MatchesToString(params CodeMatch[] matches)

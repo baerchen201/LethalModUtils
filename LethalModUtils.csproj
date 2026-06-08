@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <AssemblyName>baer1.LethalModUtils</AssemblyName>
     <Product>LethalModUtils</Product>
-    <Title>$(Product)</Title>
+    <Title>LethalModUtils</Title>
+    <Version>1.0.0</Version>
     <Authors>baer1</Authors>
-    <Version>0.1.4</Version>
-    <AssemblyName>$(Authors).$(Product)</AssemblyName>
     <Description>A collection of useful modding utilities for Lethal Company</Description>
     <PackageTags>lethal company;bepinex</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
@@ -22,7 +22,7 @@
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>$(Product)</RootNamespace>
+    <RootNamespace>LethalModUtils</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -40,7 +40,6 @@
     <DebugType>embedded</DebugType>
     <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=./</PathMap>
   </PropertyGroup>
-  <!-- Primary Package References -->
   <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
     <PackageReference
