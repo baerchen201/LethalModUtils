@@ -519,9 +519,48 @@ public struct StaticData
             public float outTangent;
             public float inWeight;
             public float outWeight;
+
+            // https://discussions.unity.com/t/what-is-the-math-behind-animationcurve-evaluate/72058/3
+            public float Evaluate(float t, Keyframe other)
+            {
+                var dt = other.time - time;
+
+                var m0 = outTangent * dt;
+                var m1 = other.inTangent * dt;
+
+                var t2 = t * t;
+                var t3 = t2 * t;
+
+                var a = 2 * t3 - 3 * t2 + 1;
+                var b = t3 - 2 * t2 + t;
+                var c = t3 - t2;
+                var d = -2 * t3 + 3 * t2;
+
+                return a * value + b * m0 + c * m1 + d * other.value;
+            }
         }
 
         public Keyframe[] keys;
+
+        /// <summary>
+        /// Approximation of the Evaluate function
+        /// </summary>
+        /// <seealso cref="UnityEngine.AnimationCurve.Evaluate"/>
+        public float Evaluate(float t)
+        {
+            // this has got to be the sloppiest code ive ever written
+
+            if (keys.Length < 2)
+                throw new NotImplementedException();
+
+            for (var i = 0; i < keys.Length; i++)
+            {
+                var key = keys[i];
+                if (key.time >= t)
+                    return key.Evaluate(t, keys[++i]);
+            }
+            throw new ArgumentException($"Invalid time {t}", nameof(t));
+        }
     }
 
     public struct Color
